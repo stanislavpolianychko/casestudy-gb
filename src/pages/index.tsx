@@ -1,30 +1,44 @@
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import AppSurface from '@/components/AppSurface';
 import Header from '@/components/Header';
 import TaskList from '@/components/TaskList';
 import Task from '@/dto/task';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import User from '@/dto/user';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [page, setPage] = useState(1); // Add this line
 
-  const fetchTasks = async (userId: number) => {
+  const fetchTasks = async (userId: number, page: number) => {
     const response = await axios.get<Task[]>(
-      `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${userId}/tasks`,
+      `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${userId}/tasks?limit=10&page=${page}`, // Use page parameter
     );
+    if (response.data.length === 0) {
+      setPage(page - 1);
+      return;
+    }
     setTasks(response.data);
   };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user && user.id) {
-      fetchTasks(user.id);
+      fetchTasks(user.id, page);
     } else {
       window.location.href = '/login';
     }
-  }, []);
+  }, [page]);
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
+
+  const previousPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
 
   return (
     <Box
@@ -50,6 +64,8 @@ export default function Home() {
             gap: 1,
           }}
         >
+          <Button onClick={previousPage}>Previous</Button>
+          <Button onClick={nextPage}>Next</Button>
           <p>created by @staspolianychko</p>
         </Box>
       </AppSurface>
