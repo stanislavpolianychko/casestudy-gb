@@ -27,7 +27,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/tasks/${task.id}`,
+        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
       );
 
       if (response.status === 404) {
