@@ -5,14 +5,16 @@ import TaskList from '@/components/TaskList';
 import Task from '@/dto/task';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import TaskDetailView from '@/components/TaskDetailView';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [page, setPage] = useState(1); // Add this line
+  const [page, setPage] = useState(1);
+  const [openCreate, setOpenCreate] = useState(false); // Add this line
 
   const fetchTasks = async (userId: number, page: number) => {
     const response = await axios.get<Task[]>(
-      `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${userId}/tasks?limit=10&page=${page}`, // Use page parameter
+      `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${userId}/tasks?limit=10&page=${page}`,
     );
     if (response.data.length === 0) {
       setPage(page - 1);
@@ -40,6 +42,16 @@ export default function Home() {
     }
   };
 
+  const handleCreateOpen = () => {
+    // Add this function
+    setOpenCreate(true);
+  };
+
+  const handleCreateClose = () => {
+    // Add this function
+    setOpenCreate(false);
+  };
+
   return (
     <Box
       sx={{
@@ -53,7 +65,8 @@ export default function Home() {
       }}
     >
       <AppSurface>
-        <Header title={'My app'}></Header>
+        <Header title={'My app'} />
+        <Button onClick={handleCreateOpen}>Create</Button> {/* Add this line */}
         <TaskList tasks={tasks} />
         <Box
           sx={{
@@ -68,6 +81,19 @@ export default function Home() {
           <Button onClick={nextPage}>Next</Button>
           <p>created by @staspolianychko</p>
         </Box>
+        <TaskDetailView
+          task={{
+            isComplete: false,
+            name: '',
+            description: '',
+            tags: '',
+            dueDate: 0,
+            id: '',
+            userId: '',
+          }}
+          open={openCreate}
+          onClose={handleCreateClose}
+        />
       </AppSurface>
     </Box>
   );
