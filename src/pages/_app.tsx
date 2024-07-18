@@ -1,3 +1,4 @@
+// _app.tsx
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import type { AppProps } from 'next/app';
@@ -9,7 +10,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [theme, setTheme] = useState(lightTheme);
+  const [theme, setTheme] = useState(darkTheme); // default to dark theme
   const [user, setUser] = useState(undefined);
 
   useEffect(() => {
@@ -17,7 +18,17 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    // read theme from local storage
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      setTheme(storedTheme === 'light' ? lightTheme : darkTheme);
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme === lightTheme ? 'light' : 'dark');
+  }, [theme]);
 
   const toggleTheme = () => {
     setTheme((prevTheme) =>

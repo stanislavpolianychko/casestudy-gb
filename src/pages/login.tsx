@@ -1,8 +1,6 @@
-import { Box, Button, TextField, Grid, Paper, Container } from '@mui/material';
+import { Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import LoginForm from '@/components/LoginForm';
 
 export default function Login() {
@@ -40,7 +38,7 @@ export default function Login() {
   };
 
   return (
-    <Grid container direction="column" style={{ minHeight: '100vh' }}>
+    <Grid container direction="column">
       <Grid
         item
         container

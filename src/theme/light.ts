@@ -12,9 +12,7 @@ const lightTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          flexGrow: 1,
           backgroundColor: 'white',
-          maxHeight: '100px',
           boxShadow: 'none',
           borderBottom: 'none',
         },
@@ -26,43 +24,15 @@ const lightTheme = createTheme({
           color: 'black',
           borderColor: 'black',
           boxShadow: 'none',
-          backgroundColor: '#fff',
-          '&.MuiButton-containedPrimary': {
-            backgroundColor: 'blue',
-            color: 'white',
-            '&:hover': {
-              backgroundColor: 'darkblue',
-            },
-          },
-        },
-      },
-    },
-    MuiTextField: {
-      defaultProps: {
-        variant: 'outlined',
-        InputLabelProps: {
-          shrink: true,
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          border: 'none',
-          transition: 'transform 0.3s ease-in-out',
-          boxShadow: 'none',
-          '&:hover': {
-            transform: 'translateY(-10px)',
-          },
         },
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          color: 'black', // set the text color here
+          color: 'black',
           '& fieldset': {
-            borderColor: 'black', // set the border color here
+            borderColor: 'black',
           },
           '&:hover fieldset': {
             borderColor: 'black',

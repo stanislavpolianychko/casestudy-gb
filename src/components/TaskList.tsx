@@ -11,8 +11,7 @@ const TaskList: React.FC<TaskListItemProps> = ({ tasks }) => {
   return (
     <Box
       sx={{
-        paddingTop: '3rem',
-        height: '80vh',
+        flexGrow: 1,
         width: '100%',
         overflow: 'auto',
       }}

@@ -19,12 +19,11 @@ const PaginationNavbar: React.FC<PaginationNavbarProps> = ({
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
         width: {
-          xs: '100%', // 100% screen width on mobile
-          sm: '50%', // 50% screen width on desktop
+          xs: '100%',
+          sm: '50%',
         },
-        margin: '0 auto', // center the component
+        margin: '0 auto',
       }}
     >
       <IconButton onClick={onPreviousPage} disabled={page === 1}>

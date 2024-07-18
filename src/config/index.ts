@@ -9,7 +9,7 @@ abstract class AppConfig {
     const apiBaseUrl: string | undefined = process.env.NEXT_PUBLIC_API_BASE_URL;
     if (!apiBaseUrl) {
       console.error('NEXT_PUBLIC_API_BASE_URL is not set in your .env file.');
-      process.exit(1);
+      // process.exit(1);
     }
     this.apiBaseUrl = apiBaseUrl;
   }

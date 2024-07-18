@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import { Checkbox } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Task from '@/dto/task';
 import axios from 'axios';
-import TaskDetail from '@/components/TaskDetailView';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { bottom } from '@popperjs/core';
 import CustomCheckbox from '@/components/CompleteTaskButton';
+import TaskModalView from '@/components/TaskModalView';
 
 interface TaskListItemProps {
   task: Task;
@@ -15,7 +11,16 @@ interface TaskListItemProps {
 const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
   const [isCompleted, setIsCompleted] = useState(task.isComplete);
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<'readonly' | 'edit'>('readonly');
 
+  const handleOpen = (mode: 'readonly' | 'edit') => {
+    setMode(mode);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleCheckboxChange = async (newIsCompleted: boolean) => {
     task.isComplete = newIsCompleted;
     await axios.put(
@@ -40,14 +45,6 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
     }
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <div
       style={{
@@ -69,17 +66,28 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
         {task.name}
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '30px' }}>
-        <img src={'/edit-icon.svg'} style={{ width: '20px', height: '20px' }} />
+        <img
+          src={'/edit-icon.svg'}
+          style={{ width: '20px', height: '20px' }}
+          onClick={() => handleOpen('edit')}
+        />
         <img
           src={'/delete-icon.svg'}
           style={{ width: '20px', height: '20px' }}
+          onClick={() => handleDelete()}
         />
         <img
           src={'/3-dots-vertical-icon.svg'}
           style={{ width: '20px', height: '20px' }}
+          onClick={() => handleOpen('readonly')}
         />
       </div>
-      <TaskDetail task={task} open={open} onClose={handleClose} />
+      <TaskModalView
+        mode={mode}
+        onClose={handleClose}
+        isOpen={open}
+        task={task}
+      />
     </div>
   );
 };
