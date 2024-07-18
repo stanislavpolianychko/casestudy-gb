@@ -1,19 +1,12 @@
 import { useState } from 'react';
-import {
-  TextField,
-  Button,
-  Box,
-  IconButton,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { Box, IconButton, Select, MenuItem } from '@mui/material';
 import TaskModalView from './TaskModalView';
 import Task from '@/dto/task';
 import axios from 'axios';
 
 interface CreateTaskButtonProps {
   onCreate: () => void;
-  onTagChange?: (tag: string) => void;
+  onTagChange: (tag: string) => void;
 }
 
 const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
@@ -22,7 +15,7 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
 }) => {
   const [taskName, setTaskName] = useState('');
   const [open, setOpen] = useState(false);
-  const [selectedTag, setSelectedTag] = useState<string>('personal');
+  const [selectedTag, setSelectedTag] = useState<string>('');
 
   const handleOpen = () => {
     if (taskName) {
@@ -73,6 +66,7 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
           onTagChange(event.target.value);
         }}
       >
+        <MenuItem value={''}>no tag</MenuItem>
         <MenuItem value={'work'}>work</MenuItem>
         <MenuItem value={'personal'}>personal</MenuItem>
         <MenuItem value={'school'}>school</MenuItem>

@@ -9,7 +9,7 @@ export default function Login() {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user && user.id) {
-      // window.location.href = '/';
+      window.location.href = '/';
     }
   }, []);
 

@@ -1,4 +1,4 @@
-import { Grid, MenuItem, Select } from '@mui/material';
+import { Grid } from '@mui/material';
 import TaskList from '@/components/TaskList';
 import Task from '@/dto/task';
 import { useEffect, useState } from 'react';
@@ -16,13 +16,22 @@ export default function Home() {
     page: number,
     tag: string | null,
   ) => {
-    let url = `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${userId}/tasks?limit=9&page=${page}`;
+    let url = `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${userId}/tasks?limit=9&page=${page}&sortBy=priority&order=desc`;
     if (tag) {
       url += `&tag=${tag}`;
     }
     console.log('url', url);
-    const response = await axios.get(url);
-    setTasks(response.data);
+    try {
+      const response = await axios.get(url);
+      if (response.status == 200 && response?.data.length != 0) {
+        setTasks(response.data);
+      } else {
+        setTasks([]);
+      }
+    } catch (error) {
+      setTasks([]);
+      console.error('Failed to fetch tasks:', error);
+    }
   };
 
   useEffect(() => {
