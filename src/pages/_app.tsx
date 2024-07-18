@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    if (storedUser !== 'undefined' && storedUser) {
       setUser(JSON.parse(storedUser));
     }
 

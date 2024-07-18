@@ -2,20 +2,24 @@ import React, { useState } from 'react';
 import { TextField, Button, Paper, Typography, Stack } from '@mui/material';
 
 interface LoginFormProps {
-  nickname: string;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleSubmit: (nickname: string) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ nickname, handleSubmit }) => {
-  const [nicknameState, setEmailState] = useState(nickname);
+const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit }) => {
+  const [nicknameState, setEmailState] = useState('');
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailState(event.target.value);
   };
 
+  const handleFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    handleSubmit(nicknameState);
+  };
+
   return (
     <Paper elevation={0} style={{ padding: '2rem' }}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <Stack spacing={2}>
           <Typography variant="h4" component="h1">
             Hello!
@@ -32,6 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ nickname, handleSubmit }) => {
             onChange={handleEmailChange}
             required
             fullWidth
+            inputProps={{ maxLength: 5 }}
           />
           <Button type="submit" variant="outlined" color="secondary" fullWidth>
             Login

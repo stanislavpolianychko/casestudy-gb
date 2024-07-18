@@ -94,6 +94,7 @@ const ModalContent: React.FC<TaskModalViewProps> = ({
         color={'secondary'}
         size="small"
         value={taskName}
+        sx={{ width: '60%' }}
         onChange={(e) => setTaskName(e.target.value)}
         placeholder="Task name"
         disabled={mode === 'readonly'}
@@ -101,6 +102,7 @@ const ModalContent: React.FC<TaskModalViewProps> = ({
       <TextField
         color={'secondary'}
         size="small"
+        sx={{ width: '60%' }}
         value={taskDescription}
         onChange={(e) => setTaskDescription(e.target.value)}
         placeholder="Task description"

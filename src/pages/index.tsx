@@ -5,14 +5,16 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import CreateTaskButton from '@/components/CreateTaskButton';
 import PaginationNavbar from '@/components/PagginationNavBar';
+import User from '@/dto/user';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [page, setPage] = useState(1);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const fetchTasks = async (
-    userId: number,
+    userId: string,
     page: number,
     tag: string | null,
   ) => {
@@ -23,7 +25,11 @@ export default function Home() {
     console.log('url', url);
     try {
       const response = await axios.get(url);
-      if (response.status == 200 && response?.data.length != 0) {
+      if (response.status == 200) {
+        if (response.data.length === 0 && page > 1) {
+          setPage(page - 1);
+          return;
+        }
         setTasks(response.data);
       } else {
         setTasks([]);
@@ -36,6 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    setCurrentUser(user);
     if (user && user.id) {
       console.log('user', selectedTag);
       fetchTasks(user.id, page, selectedTag);
@@ -62,10 +69,13 @@ export default function Home() {
       style={{ flexGrow: 1, overflow: 'auto', margin: '0 20px' }}
     >
       <CreateTaskButton
-        onTagChange={(tag) => fetchTasks(1, 1, tag)}
-        onCreate={() => fetchTasks(1, 1, selectedTag)}
+        onTagChange={(tag) => fetchTasks(currentUser!.id, 1, tag)}
+        onCreate={() => fetchTasks(currentUser!.id, 1, selectedTag)}
       />
-      <TaskList onUpdate={() => fetchTasks(1, 1, selectedTag)} tasks={tasks} />
+      <TaskList
+        onUpdate={() => fetchTasks(currentUser!.id, 1, selectedTag)}
+        tasks={tasks}
+      />
       <PaginationNavbar
         page={page}
         hasNextPage={tasks.length > 0}

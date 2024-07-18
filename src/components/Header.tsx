@@ -6,6 +6,7 @@ import {
   Toolbar,
   useMediaQuery,
   useTheme,
+  Link,
 } from '@mui/material';
 import User from '@/dto/user';
 import SwitchThemeButton from '@/components/SwithThemeButton';
@@ -50,7 +51,9 @@ const Header: React.FC<HeaderProps> = ({ userInfo, toggleTheme }) => {
             width: '100%',
           }}
         >
-          <Logo size={logoSize} />
+          <Link href="/login">
+            <Logo size={logoSize} />
+          </Link>
           {isMobile && (
             <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
           )}

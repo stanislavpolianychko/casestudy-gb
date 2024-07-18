@@ -79,7 +79,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
           initialChecked={isCompleted}
           onCheckedChange={handleCheckboxChange}
         />
-        {task.name}
+        {task.name.length > 15 ? `${task.name.substring(0, 15)}...` : task.name}
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '30px' }}>
         <img
