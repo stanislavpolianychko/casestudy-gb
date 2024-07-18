@@ -3,14 +3,13 @@ import TaskList from '@/components/TaskList';
 import Task from '@/dto/task';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import TaskDetailView from '@/components/TaskDetailView';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import CreateTaskButton from '@/components/CreateTaskButton';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [page, setPage] = useState(1);
-  const [openCreate, setOpenCreate] = useState(false); // Add this line
   const [user, setUser] = useState(undefined);
 
   const fetchTasks = async (userId: number, page: number) => {
@@ -44,18 +43,8 @@ export default function Home() {
     }
   };
 
-  const handleCreateOpen = () => {
-    // Add this function
-    setOpenCreate(true);
-  };
-
-  const handleCreateClose = () => {
-    // Add this function
-    setOpenCreate(false);
-  };
-
   return (
-    <Grid container direction="column" style={{ minHeight: '100vh' }}>
+    <>
       <Grid item>
         <Header userInfo={user} />
       </Grid>
@@ -65,40 +54,34 @@ export default function Home() {
         justifyContent="center"
         alignItems="center"
         style={{ flexGrow: 1 }}
+        sx={{
+          width: {
+            xs: '99%',
+            sm: '80%', // 80% screen width on desktop
+          },
+          mx: 'auto', // center the grid
+        }}
       >
-        <Paper elevation={0} style={{ padding: '2rem' }}>
-          <Button onClick={handleCreateOpen}>Create</Button>
-          <TaskList tasks={tasks} />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 1,
-            }}
-          >
-            <Button onClick={previousPage}>Previous</Button>
-            <Button onClick={nextPage}>Next</Button>
-          </Box>
-          <TaskDetailView
-            task={{
-              isComplete: false,
-              name: '',
-              description: '',
-              tags: '',
-              dueDate: 0,
-              id: '',
-              userId: '',
-            }}
-            open={openCreate}
-            onClose={handleCreateClose}
-          />
+        <Paper elevation={0} style={{ padding: '1rem', width: '100%' }}>
+          <CreateTaskButton />
+          {/*<TaskList tasks={tasks} />*/}
+          {/*<Box*/}
+          {/*  sx={{*/}
+          {/*    display: 'flex',*/}
+          {/*    flexDirection: 'column',*/}
+          {/*    justifyContent: 'center',*/}
+          {/*    alignItems: 'center',*/}
+          {/*    gap: 1,*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <Button onClick={previousPage}>Previous</Button>*/}
+          {/*  <Button onClick={nextPage}>Next</Button>*/}
+          {/*</Box>*/}
         </Paper>
       </Grid>
       <Grid item>
         <Footer />
       </Grid>
-    </Grid>
+    </>
   );
 }

@@ -5,6 +5,7 @@ import Task from '@/dto/task';
 import axios from 'axios';
 import TaskDetail from '@/components/TaskDetailView';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { bottom } from '@popperjs/core';
 
 interface TaskListItemProps {
   task: Task;
@@ -57,7 +58,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
         padding: '10px',
         borderRadius: '10px',
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-        margin: '10px',
+        marginBottom: '10px',
       }}
     >
       <Checkbox checked={isCompleted} onChange={handleCheckboxChange} />
