@@ -55,6 +55,7 @@ const CompleteTaskButton: React.FC<CompleteTaskButtonProps> = ({
     task.isComplete = newChecked;
     // Call API to update the task's complete status
     await axios.put(
+      // TODO: use apiClient
       `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
       task,
     );
