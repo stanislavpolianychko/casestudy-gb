@@ -4,7 +4,7 @@ import axios from 'axios';
 import LoginForm from '@/components/LoginForm';
 
 export default function Login() {
-  const [email, setEmail] = useState<string>('');
+  const [nickname, setEmail] = useState<string>('');
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -17,7 +17,7 @@ export default function Login() {
     event.preventDefault();
     try {
       let response = await axios.get(
-        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users?email=${email}`,
+        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users?nickname=${nickname}`,
       );
 
       console.log('we are here');
@@ -25,7 +25,7 @@ export default function Login() {
         // User does not exist, create a new user
         response = await axios.post(
           'https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users',
-          { email },
+          { nickname },
         );
       }
 
@@ -46,7 +46,7 @@ export default function Login() {
         alignItems="center"
         style={{ flexGrow: 1 }}
       >
-        <LoginForm email={email} handleSubmit={handleSubmit} />
+        <LoginForm nickname={nickname} handleSubmit={handleSubmit} />
       </Grid>
     </Grid>
   );

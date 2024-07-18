@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { TextField, Button, Paper, Typography, Stack } from '@mui/material';
 
 interface LoginFormProps {
-  email: string;
+  nickname: string;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ email, handleSubmit }) => {
-  const [emailState, setEmailState] = useState(email);
+const LoginForm: React.FC<LoginFormProps> = ({ nickname, handleSubmit }) => {
+  const [nicknameState, setEmailState] = useState(nickname);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailState(event.target.value);
@@ -28,7 +28,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, handleSubmit }) => {
             color={'secondary'}
             label="Nickname"
             size={'small'}
-            value={emailState}
+            value={nicknameState}
             onChange={handleEmailChange}
             required
             fullWidth

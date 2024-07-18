@@ -1,3 +1,7 @@
+import darkTheme from '@/theme/dark';
+
+export const defaultTheme = darkTheme;
+
 abstract class AppConfig {
   public static apiBaseUrl: string | undefined;
 
