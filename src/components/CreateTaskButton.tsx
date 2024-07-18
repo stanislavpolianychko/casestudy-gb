@@ -59,7 +59,7 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
       <Select
         color={'secondary'}
         size="small"
-        sx={{ width: '90%' }}
+        sx={{ width: { xs: '90%', md: '50%' } }}
         value={selectedTag}
         onChange={(event) => {
           setSelectedTag(event.target.value);
