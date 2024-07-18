@@ -1,6 +1,7 @@
 import React from 'react';
 import Task from '@/dto/task';
 import TaskListItem from '@/components/TaskListItem';
+import { Box } from '@mui/material';
 
 interface TaskListItemProps {
   tasks: Task[];
@@ -8,11 +9,18 @@ interface TaskListItemProps {
 
 const TaskList: React.FC<TaskListItemProps> = ({ tasks }) => {
   return (
-    <>
+    <Box
+      sx={{
+        paddingTop: '3rem',
+        height: '80vh',
+        width: '100%',
+        overflow: 'auto',
+      }}
+    >
       {tasks.map((task) => (
         <TaskListItem key={task.id} task={task} />
       ))}
-    </>
+    </Box>
   );
 };
 

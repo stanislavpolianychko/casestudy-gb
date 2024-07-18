@@ -6,6 +6,7 @@ import axios from 'axios';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CreateTaskButton from '@/components/CreateTaskButton';
+import PaginationNavbar from '@/components/PagginationNavBar';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -64,19 +65,13 @@ export default function Home() {
       >
         <Paper elevation={0} style={{ padding: '1rem', width: '100%' }}>
           <CreateTaskButton />
-          {/*<TaskList tasks={tasks} />*/}
-          {/*<Box*/}
-          {/*  sx={{*/}
-          {/*    display: 'flex',*/}
-          {/*    flexDirection: 'column',*/}
-          {/*    justifyContent: 'center',*/}
-          {/*    alignItems: 'center',*/}
-          {/*    gap: 1,*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  <Button onClick={previousPage}>Previous</Button>*/}
-          {/*  <Button onClick={nextPage}>Next</Button>*/}
-          {/*</Box>*/}
+          <TaskList tasks={tasks} />
+          <PaginationNavbar
+            page={page}
+            hasNextPage={tasks.length > 0}
+            onPreviousPage={previousPage}
+            onNextPage={nextPage}
+          />
         </Paper>
       </Grid>
       <Grid item>

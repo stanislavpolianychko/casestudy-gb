@@ -34,7 +34,7 @@ const CreateTaskButton = () => {
           padding: 0,
           width: {
             xs: '100%', // full screen width on mobile
-            sm: '100%', // 50% screen width on desktop
+            sm: '50%', // 50% screen width on desktop
           },
           height: '30px', // smaller height
         }}
@@ -49,7 +49,11 @@ const CreateTaskButton = () => {
           justifyContent: 'center', // align items in the center horizontally
         }}
       >
-        <img src="/add-task-button.svg" alt="plus icon" />
+        <img
+          src="/add-task-button.svg"
+          style={{ width: '35px', height: '35px' }}
+          alt="plus icon"
+        />
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Box
