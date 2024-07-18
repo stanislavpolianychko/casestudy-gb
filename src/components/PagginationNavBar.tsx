@@ -29,14 +29,14 @@ const PaginationNavbar: React.FC<PaginationNavbarProps> = ({
     >
       <IconButton onClick={onPreviousPage} disabled={page === 1}>
         <img
-          src={page === 1 ? 'nav-left-inactive.svg' : 'nav-left-active.svg'}
+          src="/nav-left.svg"
           alt="Previous page"
           style={{ width: '15px', height: '15px' }}
         />
       </IconButton>
       <IconButton onClick={onNextPage} disabled={!hasNextPage}>
         <img
-          src={!hasNextPage ? 'nav-right-inactive.svg' : 'nav-right-active.svg'}
+          src="/nav-right.svg"
           alt="Next page"
           style={{ width: '15px', height: '15px' }}
         />
