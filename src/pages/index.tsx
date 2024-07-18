@@ -1,16 +1,14 @@
-import { Box, Button } from '@mui/material';
-import AppSurface from '@/components/AppSurface';
-import Header from '@/components/Header';
+import { Grid } from '@mui/material';
 import TaskList from '@/components/TaskList';
 import Task from '@/dto/task';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import TaskDetailView from '@/components/TaskDetailView';
+import CreateTaskButton from '@/components/CreateTaskButton';
+import PaginationNavbar from '@/components/PagginationNavBar';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [page, setPage] = useState(1);
-  const [openCreate, setOpenCreate] = useState(false); // Add this line
 
   const fetchTasks = async (userId: number, page: number) => {
     const response = await axios.get<Task[]>(
@@ -42,59 +40,21 @@ export default function Home() {
     }
   };
 
-  const handleCreateOpen = () => {
-    // Add this function
-    setOpenCreate(true);
-  };
-
-  const handleCreateClose = () => {
-    // Add this function
-    setOpenCreate(false);
-  };
-
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background:
-          'linear-gradient(45deg, rgba(173, 216, 230, 0.8), rgba(255, 235, 205, 0.8), rgba(173, 216, 230, 0.8))',
-      }}
+    <Grid
+      item
+      container
+      direction="column"
+      style={{ flexGrow: 1, overflow: 'auto', margin: '0 20px' }}
     >
-      <AppSurface>
-        <Header title={'My app'} />
-        <Button onClick={handleCreateOpen}>Create</Button> {/* Add this line */}
-        <TaskList tasks={tasks} />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <Button onClick={previousPage}>Previous</Button>
-          <Button onClick={nextPage}>Next</Button>
-          <p>created by @staspolianychko</p>
-        </Box>
-        <TaskDetailView
-          task={{
-            isComplete: false,
-            name: '',
-            description: '',
-            tags: '',
-            dueDate: 0,
-            id: '',
-            userId: '',
-          }}
-          open={openCreate}
-          onClose={handleCreateClose}
-        />
-      </AppSurface>
-    </Box>
+      <CreateTaskButton />
+      <TaskList tasks={tasks} />
+      <PaginationNavbar
+        page={page}
+        hasNextPage={tasks.length > 0}
+        onPreviousPage={previousPage}
+        onNextPage={nextPage}
+      />
+    </Grid>
   );
 }

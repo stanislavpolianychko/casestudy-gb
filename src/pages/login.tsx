@@ -1,6 +1,7 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import LoginForm from '@/components/LoginForm';
 
 export default function Login() {
   const [email, setEmail] = useState<string>('');
@@ -8,7 +9,7 @@ export default function Login() {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user && user.id) {
-      window.location.href = '/';
+      // window.location.href = '/';
     }
   }, []);
 
@@ -37,27 +38,16 @@ export default function Login() {
   };
 
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background:
-          'linear-gradient(45deg, rgba(173, 216, 230, 0.8), rgba(255, 235, 205, 0.8), rgba(173, 216, 230, 0.8))',
-      }}
-    >
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Email"
-          // type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <Button type="submit">Login</Button>
-      </form>
-    </Box>
+    <Grid container direction="column">
+      <Grid
+        item
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{ flexGrow: 1 }}
+      >
+        <LoginForm email={email} handleSubmit={handleSubmit} />
+      </Grid>
+    </Grid>
   );
 }
