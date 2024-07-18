@@ -1,18 +1,21 @@
 import { useState } from 'react';
-import { TextField, Button, Modal, Box } from '@mui/material';
+import { TextField, Button, Modal, Box, IconButton } from '@mui/material';
 
 const CreateTaskButton = () => {
   const [taskName, setTaskName] = useState('');
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
-    if (taskName) {
-      setOpen(true);
-    }
+    setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleAdd = () => {
+    // Add your task adding logic here
+    handleClose();
   };
 
   return (
@@ -20,7 +23,7 @@ const CreateTaskButton = () => {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'center', // This aligns children along the vertical line in the center
         justifyContent: 'center',
       }}
     >
@@ -31,30 +34,31 @@ const CreateTaskButton = () => {
         placeholder="Enter task name"
         size={'small'}
         sx={{
-          padding: 0,
           width: {
-            xs: '100%', // full screen width on mobile
-            sm: '50%', // 50% screen width on desktop
+            xs: '100%',
+            sm: '50%',
           },
-          height: '30px', // smaller height
+          height: '30px',
         }}
       />
-      <Button
+      <IconButton
         onClick={handleOpen}
         sx={{
-          maxHeight: '10px', // smaller height
-          maxWidth: '10px', // smaller width
           display: 'flex',
           alignItems: 'center', // align items in the center vertically
           justifyContent: 'center', // align items in the center horizontally
+          padding: '10px', // increase the size of the IconButton
+          height: '30px', // match the height with TextField
+          marginBottom: '-10px', // add margin to the right of the IconButton
         }}
       >
         <img
+          onClick={handleOpen}
           src="/add-task-button.svg"
           style={{ width: '35px', height: '35px' }}
           alt="plus icon"
         />
-      </Button>
+      </IconButton>
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
@@ -67,7 +71,7 @@ const CreateTaskButton = () => {
         >
           {/* Add your task form here */}
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
+          <Button onClick={handleAdd}>Add</Button>
         </Box>
       </Modal>
     </Box>

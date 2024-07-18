@@ -12,11 +12,10 @@ import SwitchThemeButton from '@/components/SwithThemeButton';
 
 interface HeaderProps {
   userInfo?: User;
-  toggleTheme: () => void; // Add this line
+  toggleTheme: () => void;
 }
 
 const Logo: React.FC<{ size: string }> = ({ size }) => (
-  // eslint-disable-next-line @next/next/no-img-element
   <img
     src={'/todo-logo.svg'}
     alt="logo"
@@ -25,7 +24,6 @@ const Logo: React.FC<{ size: string }> = ({ size }) => (
 );
 
 const UserIcon: React.FC<{ size: string }> = ({ size }) => (
-  // eslint-disable-next-line @next/next/no-img-element
   <img
     src="/user-sample-icon.svg"
     alt="user logo"
@@ -34,16 +32,15 @@ const UserIcon: React.FC<{ size: string }> = ({ size }) => (
 );
 
 const Header: React.FC<HeaderProps> = ({ userInfo, toggleTheme }) => {
-  // Add toggleTheme here
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const logoSize = isMobile ? '70px' : '90px';
+  const logoSize = '90px';
   const imageSize = isMobile ? '50px' : '60px';
   const typographyVariant = isMobile ? 'body1' : 'h6';
 
   return (
-    <AppBar position="static">
+    <AppBar sx={{ padding: '15px' }} position="static">
       <Toolbar>
         <Box
           sx={{
@@ -54,8 +51,9 @@ const Header: React.FC<HeaderProps> = ({ userInfo, toggleTheme }) => {
           }}
         >
           <Logo size={logoSize} />
-          <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />{' '}
-          {/* Pass toggleTheme here */}
+          {isMobile && (
+            <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
+          )}
           {userInfo && (
             <Box
               sx={{
@@ -63,9 +61,12 @@ const Header: React.FC<HeaderProps> = ({ userInfo, toggleTheme }) => {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                gap: 2,
+                gap: 5,
               }}
             >
+              {!isMobile && (
+                <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
+              )}
               <Typography sx={{ color: '#959595' }} variant={typographyVariant}>
                 {userInfo.email}
               </Typography>
