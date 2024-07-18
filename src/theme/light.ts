@@ -1,29 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
-const theme = createTheme({
+const lightTheme = createTheme({
   components: {
-    MuiContainer: {
-      styleOverrides: {
-        root: {
-          borderTop: 'none',
-          boxShadow: 'none',
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: 'white',
-        },
-      },
-    },
-    MuiToolbar: {
-      styleOverrides: {
-        root: {
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-      },
-    },
     MuiTypography: {
       styleOverrides: {
         root: {
@@ -36,7 +14,6 @@ const theme = createTheme({
         root: {
           flexGrow: 1,
           backgroundColor: 'white',
-          padding: '10px',
           maxHeight: '100px',
           boxShadow: 'none',
           borderBottom: 'none',
@@ -104,4 +81,4 @@ const theme = createTheme({
   },
 });
 
-export default theme;
+export default lightTheme;

@@ -46,9 +46,6 @@ export default function Home() {
 
   return (
     <>
-      <Grid item>
-        <Header userInfo={user} />
-      </Grid>
       <Grid
         item
         container

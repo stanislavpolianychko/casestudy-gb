@@ -41,9 +41,6 @@ export default function Login() {
 
   return (
     <Grid container direction="column" style={{ minHeight: '100vh' }}>
-      <Grid item>
-        <Header />
-      </Grid>
       <Grid
         item
         container
