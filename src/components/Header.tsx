@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ userInfo, toggleTheme }) => {
                 <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
               )}
               <Typography sx={{ color: '#959595' }} variant={typographyVariant}>
-                {userInfo.email}
+                {userInfo.nickname}
               </Typography>
               <UserIcon size={imageSize} />
             </Box>

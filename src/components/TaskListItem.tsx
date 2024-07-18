@@ -6,9 +6,10 @@ import TaskModalView from '@/components/TaskModalView';
 
 interface TaskListItemProps {
   task: Task;
+  onUpdate: () => void;
 }
 
-const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
+const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
   const [isCompleted, setIsCompleted] = useState(task.isComplete);
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<'readonly' | 'edit'>('readonly');
@@ -18,9 +19,23 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
     setOpen(true);
   };
 
+  const handleEdit = async (updatedTask: Partial<Task>) => {
+    try {
+      const response = await axios.put(
+        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
+        updatedTask,
+      );
+      console.log('Task updated successfully:', response.data);
+    } catch (error) {
+      console.error('Failed to update task:', error);
+    }
+    onUpdate();
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleCheckboxChange = async (newIsCompleted: boolean) => {
     task.isComplete = newIsCompleted;
     await axios.put(
@@ -40,6 +55,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
       } else {
         console.log('Task deleted successfully');
       }
+      onUpdate();
     } catch (error) {
       console.error('Failed to delete task:', error);
     }
@@ -55,7 +71,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
         borderRadius: '10px',
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
         marginBottom: '10px',
-        backgroundColor: 'rgba(224, 224, 224, 0.35)', // #E0E0E0 with 35% transparency
+        // backgroundColor: 'rgba(224, 224, 224, 0.35)', // #E0E0E0 with 35% transparency
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -84,6 +100,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task }) => {
       </div>
       <TaskModalView
         mode={mode}
+        onSubmit={handleEdit}
         onClose={handleClose}
         isOpen={open}
         task={task}

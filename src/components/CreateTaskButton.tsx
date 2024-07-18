@@ -1,13 +1,26 @@
 import { useState } from 'react';
-import { TextField, Button, Box, IconButton } from '@mui/material';
+import { Box, IconButton, Select, MenuItem } from '@mui/material';
 import TaskModalView from './TaskModalView';
 import Task from '@/dto/task';
+import axios from 'axios';
 
-const CreateTaskButton = () => {
+interface CreateTaskButtonProps {
+  onCreate: () => void;
+  onTagChange: (tag: string) => void;
+}
+
+const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
+  onCreate,
+  onTagChange,
+}) => {
   const [taskName, setTaskName] = useState('');
   const [open, setOpen] = useState(false);
+  const [selectedTag, setSelectedTag] = useState<string>('');
 
   const handleOpen = () => {
+    if (taskName) {
+      setTaskName('');
+    }
     setOpen(true);
   };
 
@@ -15,8 +28,21 @@ const CreateTaskButton = () => {
     setOpen(false);
   };
 
-  const handleAdd = (task: Task) => {
-    // Handle add task
+  const handleAdd = async (task: Partial<Task>) => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    try {
+      const response = await axios.post(
+        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${user.id}/tasks`,
+        task,
+      );
+      console.log('here just for test', task);
+      console.log('Task created successfully:', response.data);
+      onCreate();
+    } catch (error) {
+      console.error('Failed to create task:', error);
+    }
+
     handleClose();
   };
 
@@ -30,19 +56,22 @@ const CreateTaskButton = () => {
         justifyContent: 'center',
       }}
     >
-      <TextField
+      <Select
         color={'secondary'}
-        value={taskName}
-        onChange={(e) => setTaskName(e.target.value)}
-        placeholder="Enter task name"
-        size={'small'}
-        sx={{
-          width: {
-            xs: '100%',
-            sm: '50%',
-          },
+        size="small"
+        sx={{ width: '90%' }}
+        value={selectedTag}
+        onChange={(event) => {
+          setSelectedTag(event.target.value);
+          onTagChange(event.target.value);
         }}
-      />
+      >
+        <MenuItem value={''}>no tag</MenuItem>
+        <MenuItem value={'work'}>work</MenuItem>
+        <MenuItem value={'personal'}>personal</MenuItem>
+        <MenuItem value={'school'}>school</MenuItem>
+        <MenuItem value={'others'}>others</MenuItem>
+      </Select>
       <IconButton onClick={handleOpen}>
         <img
           src="/add-task-button.svg"
@@ -51,7 +80,7 @@ const CreateTaskButton = () => {
         />
       </IconButton>
       <TaskModalView
-        mode="create"
+        mode={'create'}
         onClose={handleClose}
         onSubmit={handleAdd}
         isOpen={open}

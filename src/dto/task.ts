@@ -2,10 +2,10 @@ interface Task {
   isComplete: boolean;
   name: string;
   description: string;
-  tags: string;
-  dueDate: number;
+  tag: string;
   id: string;
   userId: string;
+  priority: number;
 }
 
 export default Task;
