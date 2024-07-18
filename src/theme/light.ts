@@ -5,8 +5,8 @@ const theme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
-          borderTop: '1px solid black',
-          boxShadow: '0 -2px 3px 1px rgba(0, 0, 0, .3)',
+          borderTop: 'none',
+          boxShadow: 'none',
           position: 'fixed',
           bottom: 0,
           left: 0,
@@ -27,7 +27,7 @@ const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          marginLeft: '1rem',
+          fontFamily: 'Inter, Arial, sans-serif',
         },
       },
     },
@@ -38,8 +38,8 @@ const theme = createTheme({
           backgroundColor: 'white',
           padding: '10px',
           maxHeight: '100px',
-          boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .2)',
-          borderBottom: '1px solid black',
+          boxShadow: 'none',
+          borderBottom: 'none',
         },
       },
     },
@@ -48,7 +48,15 @@ const theme = createTheme({
         root: {
           color: 'black',
           borderColor: 'black',
-          boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .2)',
+          boxShadow: 'none',
+          backgroundColor: '#fff',
+          '&.MuiButton-containedPrimary': {
+            backgroundColor: 'blue',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: 'darkblue',
+            },
+          },
         },
       },
     },
@@ -63,9 +71,9 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          border: '1px solid black',
+          border: 'none',
           transition: 'transform 0.3s ease-in-out',
-          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.50)',
+          boxShadow: 'none',
           '&:hover': {
             transform: 'translateY(-10px)',
           },
@@ -75,10 +83,9 @@ const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.50)',
-          color: 'black',
+          color: 'black', // set the text color here
           '& fieldset': {
-            borderColor: 'black',
+            borderColor: 'black', // set the border color here
           },
           '&:hover fieldset': {
             borderColor: 'black',
@@ -90,16 +97,9 @@ const theme = createTheme({
       },
     },
   },
-
   palette: {
-    // primary: {
-    //   main: '#ffffff',
-    // },
-    // secondary: {
-    //   main: '#FFDFFB',
-    // },
-    background: {
-      default: 'linear-gradient(45deg, green, white, blue, pink)',
+    secondary: {
+      main: '#6B69D9',
     },
   },
 });

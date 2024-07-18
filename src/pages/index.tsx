@@ -1,16 +1,17 @@
-import { Box, Button } from '@mui/material';
-import AppSurface from '@/components/AppSurface';
-import Header from '@/components/Header';
+import { Box, Button, Grid, Paper } from '@mui/material';
 import TaskList from '@/components/TaskList';
 import Task from '@/dto/task';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TaskDetailView from '@/components/TaskDetailView';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [page, setPage] = useState(1);
   const [openCreate, setOpenCreate] = useState(false); // Add this line
+  const [user, setUser] = useState(undefined);
 
   const fetchTasks = async (userId: number, page: number) => {
     const response = await axios.get<Task[]>(
@@ -26,6 +27,7 @@ export default function Home() {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user && user.id) {
+      setUser(user);
       fetchTasks(user.id, page);
     } else {
       window.location.href = '/login';
@@ -53,48 +55,50 @@ export default function Home() {
   };
 
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background:
-          'linear-gradient(45deg, rgba(173, 216, 230, 0.8), rgba(255, 235, 205, 0.8), rgba(173, 216, 230, 0.8))',
-      }}
-    >
-      <AppSurface>
-        <Header title={'My app'} />
-        <Button onClick={handleCreateOpen}>Create</Button> {/* Add this line */}
-        <TaskList tasks={tasks} />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <Button onClick={previousPage}>Previous</Button>
-          <Button onClick={nextPage}>Next</Button>
-          <p>created by @staspolianychko</p>
-        </Box>
-        <TaskDetailView
-          task={{
-            isComplete: false,
-            name: '',
-            description: '',
-            tags: '',
-            dueDate: 0,
-            id: '',
-            userId: '',
-          }}
-          open={openCreate}
-          onClose={handleCreateClose}
-        />
-      </AppSurface>
-    </Box>
+    <Grid container direction="column" style={{ minHeight: '100vh' }}>
+      <Grid item>
+        <Header userInfo={user} />
+      </Grid>
+      <Grid
+        item
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{ flexGrow: 1 }}
+      >
+        <Paper elevation={0} style={{ padding: '2rem' }}>
+          <Button onClick={handleCreateOpen}>Create</Button>
+          <TaskList tasks={tasks} />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            <Button onClick={previousPage}>Previous</Button>
+            <Button onClick={nextPage}>Next</Button>
+          </Box>
+          <TaskDetailView
+            task={{
+              isComplete: false,
+              name: '',
+              description: '',
+              tags: '',
+              dueDate: 0,
+              id: '',
+              userId: '',
+            }}
+            open={openCreate}
+            onClose={handleCreateClose}
+          />
+        </Paper>
+      </Grid>
+      <Grid item>
+        <Footer />
+      </Grid>
+    </Grid>
   );
 }
