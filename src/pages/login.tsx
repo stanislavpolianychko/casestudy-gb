@@ -50,9 +50,6 @@ export default function Login() {
       >
         <LoginForm email={email} handleSubmit={handleSubmit} />
       </Grid>
-      <Grid item>
-        <Footer />
-      </Grid>
     </Grid>
   );
 }

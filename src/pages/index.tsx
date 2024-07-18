@@ -71,9 +71,6 @@ export default function Home() {
           />
         </Paper>
       </Grid>
-      <Grid item>
-        <Footer />
-      </Grid>
     </>
   );
 }
