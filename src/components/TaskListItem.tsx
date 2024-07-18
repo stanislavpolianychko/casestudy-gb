@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Task from '@/dto/task';
 import axios from 'axios';
-import CustomCheckbox from '@/components/CompleteTaskButton';
+import CompleteTaskButton from '@/components/CompleteTaskButton';
 import TaskModalView from '@/components/TaskModalView';
 
 interface TaskListItemProps {
@@ -75,10 +75,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <CustomCheckbox
-          initialChecked={isCompleted}
-          onCheckedChange={handleCheckboxChange}
-        />
+        <CompleteTaskButton task={task} />
         {task.name.length > 15 ? `${task.name.substring(0, 15)}...` : task.name}
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', gap: '30px' }}>

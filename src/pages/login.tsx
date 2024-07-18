@@ -5,7 +5,6 @@ import LoginForm from '@/components/LoginForm';
 
 export default function Login() {
   const handleSubmit = async (nickname: string) => {
-    // try {
     try {
       let response = await axios.get(
         `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users?nickname=${nickname}`,
