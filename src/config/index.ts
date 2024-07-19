@@ -1,9 +1,6 @@
-import darkTheme from '@/theme/dark';
-
-export const defaultTheme = darkTheme;
-
 abstract class AppConfig {
   public static apiBaseUrl: string | undefined;
+  public static userLocalStorageKey: string = 'user';
 
   /**
    * Loads the configuration values from the environment variables.
@@ -13,7 +10,7 @@ abstract class AppConfig {
     const apiBaseUrl: string | undefined = process.env.NEXT_PUBLIC_API_BASE_URL;
     if (!apiBaseUrl) {
       console.error('NEXT_PUBLIC_API_BASE_URL is not set in your .env file.');
-      // process.exit(1);
+      process.exit(1);
     }
     this.apiBaseUrl = apiBaseUrl;
   }
