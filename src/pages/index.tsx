@@ -59,15 +59,11 @@ function Home() {
   );
 
   useEffect(() => {
-    if (!currentUser) {
-      getUserFromLocalStorage();
-    }
+    getUserFromLocalStorage();
     if (currentUser && currentUser.id) {
       fetchTasks(page, selectedTag, currentUser.id).then(() => {
         console.log('Tasks updated');
       });
-    } else {
-      window.location.href = Paths.Login;
     }
   }, [selectedTag, page, currentUser, fetchTasks]);
 
