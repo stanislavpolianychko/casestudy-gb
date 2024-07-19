@@ -1,16 +1,18 @@
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import type { AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import lightTheme from '../theme/light';
 import darkTheme from '../theme/dark';
 import { Grid } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { defaultTheme } from '@/config';
+import AppConfig from '@/config';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const [theme, setTheme] = useState(defaultTheme);
+AppConfig.load();
+
+function TodoApp({ Component, pageProps }: AppProps) {
+  const [theme, setTheme] = useState(darkTheme);
   const [user, setUser] = useState(undefined);
 
   useEffect(() => {
@@ -49,4 +51,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default TodoApp;

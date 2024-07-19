@@ -1,35 +1,29 @@
 import { Grid } from '@mui/material';
 import React from 'react';
-import axios from 'axios';
 import LoginForm from '@/components/LoginForm';
+import Paths from '@/enums/paths';
+import UserAuthService from '@/services/userAuthService';
+import AppConfig from '@/config';
+import User from '@/dto/user';
 
 export default function Login() {
+  const onLoginSuccess = (user: User) => {
+    localStorage.setItem(AppConfig.userLocalStorageKey, JSON.stringify(user));
+    window.location.href = Paths.Home;
+  };
+
+  const handleLogin = async (nickname: string) => {
+    const user = await UserAuthService.login(nickname);
+    if (user) {
+      onLoginSuccess(user);
+    }
+  };
+
   const handleSubmit = async (nickname: string) => {
     try {
-      let response = await axios.get(
-        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users?nickname=${nickname}`,
-      );
-
-      if (response.status != 200 || response?.data?.length === 0) {
-        console.log('User not found, creating new user');
-        response = await axios.post(
-          'https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users',
-          { nickname },
-        );
-      }
-
-      console.log('response', response);
-      localStorage.setItem('user', JSON.stringify(response.data[0]));
-      window.location.href = '/';
+      await handleLogin(nickname);
     } catch (error) {
-      console.log('User not found, creating new user');
-      let response = await axios.post(
-        'https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users',
-        { nickname },
-      );
-
-      localStorage.setItem('user', JSON.stringify(response.data));
-      window.location.href = '/';
+      console.log(`Failed to login: ${error}`);
     }
   };
 

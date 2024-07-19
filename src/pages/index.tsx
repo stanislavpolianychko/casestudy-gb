@@ -73,7 +73,7 @@ export default function Home() {
         onCreate={() => fetchTasks(currentUser!.id, 1, selectedTag)}
       />
       <TaskList
-        onUpdate={() => fetchTasks(currentUser!.id, 1, selectedTag)}
+        onTaskUpdate={() => fetchTasks(currentUser!.id, 1, selectedTag)}
         tasks={tasks}
       />
       <PaginationNavbar
