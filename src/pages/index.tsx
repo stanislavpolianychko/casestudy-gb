@@ -51,7 +51,6 @@ function Home() {
           setPage(page - 1);
         }
       } catch (error) {
-        console.error('Failed to fetch tasks:', error);
         setTasks([]);
         console.error('Failed to fetch tasks:', error);
       }
@@ -60,29 +59,18 @@ function Home() {
   );
 
   useEffect(() => {
-    if (!currentUser) {
-      getUserFromLocalStorage();
-    }
-    const user = localStorage.getItem('user');
-    if (user) {
-      setCurrentUser(JSON.parse(user));
-    } else {
-      window.location.href = Paths.Login;
-    }
+    getUserFromLocalStorage();
     if (currentUser && currentUser.id) {
       fetchTasks(page, selectedTag, currentUser.id).then(() => {
         console.log('Tasks updated');
       });
-    } else {
-      window.location.href = Paths.Login;
     }
   }, [selectedTag, page, currentUser, fetchTasks]);
 
   const getUserFromLocalStorage = () => {
     const user = localStorage.getItem(AppConfig.userLocalStorageKey);
-    if (user) {
-      setCurrentUser(JSON.parse(user));
-    } else {
+    setCurrentUser(JSON.parse(user || '{}'));
+    if (!currentUser || !currentUser.id) {
       window.location.href = Paths.Login;
     }
   };
