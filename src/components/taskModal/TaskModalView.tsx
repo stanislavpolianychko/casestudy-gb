@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Modal } from '@mui/material';
 import Task from '@/dto/task';
 import ModalModes from '@/enums/modalModes';
 import TaskForm from '@/components/taskModal/TaskForm';
 import TaskFormActions from '@/components/taskModal/TaskFormActions';
+import Tags from '@/enums/tags';
 
 /**
  * TaskModalView component props
@@ -11,7 +12,7 @@ import TaskFormActions from '@/components/taskModal/TaskFormActions';
 export interface TaskModalViewProps {
   mode: ModalModes;
   task?: Task;
-  onSubmit: (task?: Task) => void;
+  onSubmit: (task?: Partial<Task>) => void;
   onClose: () => void;
   isOpen: boolean;
 }
@@ -48,14 +49,44 @@ const TaskModalView: React.FC<TaskModalViewProps> = ({
   task,
   mode,
 }: TaskModalViewProps): JSX.Element => {
+  const [selectedTag, setSelectedTag] = useState<string>(
+    task?.tag || Tags.None,
+  );
+  const [taskName, setTaskName] = useState(task?.name || '');
+  const [taskDescription, setTaskDescription] = useState(
+    task?.description || '',
+  );
+  const [taskPriority, setTaskPriority] = useState(task?.priority || 0);
+
+  const isDisabled = mode === ModalModes.view;
+
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={modalContentStyles}>
-        <TaskForm task={task} mode={mode} />
+        <TaskForm
+          task={task}
+          mode={mode}
+          taskName={taskName}
+          setTaskName={setTaskName}
+          taskDescription={taskDescription}
+          setTaskDescription={setTaskDescription}
+          selectedTag={selectedTag}
+          setSelectedTag={setSelectedTag}
+          taskPriority={taskPriority}
+          setTaskPriority={setTaskPriority}
+          isDisabled={isDisabled}
+        />
         <TaskFormActions
           mode={mode}
           onCancel={onClose}
-          onSubmit={() => onSubmit(task)}
+          onSubmit={() =>
+            onSubmit({
+              name: taskName,
+              description: taskDescription,
+              tag: selectedTag,
+              priority: taskPriority,
+            })
+          }
         />
       </Box>
     </Modal>

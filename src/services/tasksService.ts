@@ -55,12 +55,12 @@ abstract class TasksService {
    * @param task - The task to update.
    * @returns A promise that resolves when the task has been updated.
    */
-  public static async updateTask(task?: Task): Promise<void> {
+  public static async updateTask(task?: Partial<Task>): Promise<void> {
     if (!task) {
       return;
     }
     try {
-      await ApiClient.put(`users/${task.userId}/tasks/${task.id}`, task);
+      await ApiClient.put(`/users/${task.userId}/tasks/${task.id}`, task);
     } catch (error) {
       console.error(`Failed to update task: ${error}`);
     }
@@ -105,6 +105,7 @@ abstract class TasksService {
     userId: string,
   ): Promise<Task> {
     try {
+      console.log('Creating task:', task);
       return await ApiClient.post(`users/${userId}/tasks`, task);
     } catch (error) {
       console.error('Failed to create task:', error);

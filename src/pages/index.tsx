@@ -49,6 +49,8 @@ function Home() {
           setTasks(fetchedTasks);
         } else if (page > 1) {
           setPage(page - 1);
+        } else {
+          setTasks([]);
         }
       } catch (error) {
         setTasks([]);
@@ -94,8 +96,11 @@ function Home() {
 
   // force tasks list update from the API
   const handleTasksUpdate = useCallback(() => {
+    getUserFromLocalStorage();
     setSelectedTag(Tags.None);
-    setPage(1);
+    fetchTasks(page, selectedTag, currentUser!.id).then(() => {
+      console.log('Tasks updated');
+    });
   }, []);
 
   // Update the selectedTag state when the tag is changed.

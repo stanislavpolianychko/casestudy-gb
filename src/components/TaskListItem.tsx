@@ -60,12 +60,14 @@ const TaskListItem: React.FC<TaskListItemProps> = ({
     setOpen(false);
   };
 
-  const handleEdit = async (updatedTask?: Task) => {
+  const handleEdit = async (updatedTask?: Partial<Task>) => {
     try {
-      await TasksService.updateTask(updatedTask!);
+      await TasksService.updateTask(updatedTask);
       onUpdate();
     } catch (error) {
       console.error('Failed to update task:', error);
+    } finally {
+      handleClose();
     }
   };
 
@@ -75,6 +77,8 @@ const TaskListItem: React.FC<TaskListItemProps> = ({
       onUpdate();
     } catch (error) {
       console.error('Failed to delete task:', error);
+    } finally {
+      handleClose();
     }
   };
 
@@ -109,7 +113,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({
       </Box>
       <TaskModalView
         mode={mode}
-        onSubmit={handleEdit}
+        onSubmit={() => handleEdit(task)}
         onClose={handleClose}
         isOpen={open}
         task={task}

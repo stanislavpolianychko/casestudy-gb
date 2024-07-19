@@ -26,7 +26,6 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
   onCreate,
 }: CreateTaskButtonProps): JSX.Element => {
   const [open, setOpen] = useState(false);
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -36,6 +35,11 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
   };
 
   const handleAdd = async (task?: Partial<Task>) => {
+    if (!task) {
+      console.error('Task is undefined');
+      return;
+    }
+
     let user;
     try {
       user = JSON.parse(

@@ -9,15 +9,20 @@ import React, { useState, useEffect } from 'react';
 
 /**
  * TaskFormProps interface for TaskForm component props
- * @interface
- * @property {Task} task - Task object
- * @property {ModalModes} mode - Mode of the modal
  */
 interface TaskFormProps {
   task?: Task;
   mode: ModalModes;
+  taskName: string;
+  setTaskName: (name: string) => void;
+  taskDescription: string;
+  setTaskDescription: (description: string) => void;
+  selectedTag: string;
+  setSelectedTag: (tag: string) => void;
+  taskPriority: number;
+  setTaskPriority: (priority: number) => void;
+  isDisabled: boolean;
 }
-
 /**
  * Styles for the TaskForm component
  */
@@ -42,25 +47,16 @@ const formStyles = {
 const TaskForm: React.FC<TaskFormProps> = ({
   task,
   mode,
+  taskName,
+  setTaskName,
+  taskDescription,
+  setTaskDescription,
+  selectedTag,
+  setSelectedTag,
+  taskPriority,
+  setTaskPriority,
+  isDisabled,
 }: TaskFormProps): JSX.Element => {
-  const [selectedTag, setSelectedTag] = useState<string>(
-    task?.tag || Tags.None,
-  );
-  const [taskName, setTaskName] = useState(task?.name || '');
-  const [taskDescription, setTaskDescription] = useState(
-    task?.description || '',
-  );
-  const [taskPriority, setTaskPriority] = useState(task?.priority || 0);
-  const isDisabled = mode === ModalModes.view;
-
-  useEffect(() => {
-    if (task) {
-      setTaskName(task.name);
-      setTaskDescription(task.description);
-      setSelectedTag(task.tag);
-    }
-  }, [task]);
-
   return (
     <Box sx={formStyles.box}>
       <TextField
