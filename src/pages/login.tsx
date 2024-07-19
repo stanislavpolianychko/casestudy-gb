@@ -10,7 +10,7 @@ import { Grid } from '@mui/material';
  * It handles the form submission by calling the `UserAuthService.login` method.
  * If the login is successful, it stores the user data in localStorage and redirects the user to the home page.
  */
-export default function Login() {
+function Login() {
   const handleSubmit = async (nickname: string) => {
     try {
       const user = await UserAuthService.login(nickname);
@@ -40,3 +40,5 @@ export default function Login() {
     </Grid>
   );
 }
+
+export default Login;

@@ -9,7 +9,7 @@ import { Select, MenuItem } from '@mui/material';
 interface TagsSelectProps {
   disabled: boolean;
   selectedTag: string | null;
-  onTagChange: (tag: string | null) => void;
+  onTagChange: (tag: string) => void;
   sx?: any;
 }
 
@@ -33,7 +33,9 @@ const TagsSelect: React.FC<TagsSelectProps> = ({
       value={selectedTag}
       onChange={(event) => {
         const tag = event.target.value;
-        onTagChange(tag);
+        if (tag) {
+          onTagChange(tag);
+        }
       }}
     >
       {Object.values(Tags).map((tag) => (

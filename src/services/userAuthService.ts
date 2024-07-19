@@ -42,7 +42,7 @@ abstract class UserAuthService {
   /**
    * Logs in a user with the given nickname. If the user does not exist, a new user is created.
    * @param nickname - The nickname of the user to log in.
-   * @returns The logged in user object if successful, null otherwise.
+   * @returns The logged-in user object if successful, null otherwise.
    */
   public static async login(nickname: string): Promise<User | null> {
     let user = await this.getUserByNickname(nickname);

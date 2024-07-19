@@ -1,25 +1,37 @@
 import Task from '@/dto/task';
 import ApiClient from '@/api';
 import AppConfig from '@/config';
+import Tags from '@/enums/tags';
 
+/**
+ * TasksService is a service class for managing tasks.
+ * @class
+ */
 abstract class TasksService {
+  /**
+   * Fetches tasks from the API.
+   * @param {number} page - The page number.
+   * @param {string} [tag] - The tag to filter tasks by.
+   * @param {number} [userId] - The user ID to fetch tasks for.
+   * @returns {Promise<Task[] | null>} - A promise that resolves to an array of tasks or null.
+   */
   public static async getTasks(
     page: number,
     tag?: string,
-    userId?: number,
+    userId?: string,
   ): Promise<Task[] | null> {
     if (!userId) {
       return null;
     }
 
     const params: { [key: string]: string | number } = {
-      limit: AppConfig.taskSortingOrder,
+      limit: AppConfig.tasksPageItemsLimit,
       page: page,
       sortBy: AppConfig.sortTasksBy,
       order: AppConfig.taskSortingOrder,
     };
 
-    if (tag) {
+    if (tag && tag !== Tags.None) {
       params['tag'] = tag;
     }
 

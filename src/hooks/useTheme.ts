@@ -12,7 +12,7 @@ import { useState, useEffect, useMemo } from 'react';
  * @returns {Theme} theme - The current theme of the application.
  * @returns {Function} toggleTheme - Function to toggle the theme of the application.
  */
-function useTheme(): object {
+function useTheme() {
   const [themeType, setThemeType] = useState(ThemeTypes.dark);
 
   useEffect(() => {
