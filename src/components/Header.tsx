@@ -31,7 +31,7 @@ const styles = {
     color: '#959595',
   },
   userBox: {
-    border: '1px solid black',
+    border: '1px solid #6B69D9',
     borderRadius: '10%',
     textDecoration: 'none',
   },
