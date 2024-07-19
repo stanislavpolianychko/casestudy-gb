@@ -1,9 +1,17 @@
 import SwitchThemeButton from '@/components/SwithThemeButton';
 import Logo from '@/components/Logo';
 import Paths from '@/enums/paths';
-import React from 'react';
-import { Typography, Box, AppBar, Toolbar, Link, Theme } from '@mui/material';
 import User from '@/dto/user';
+import React from 'react';
+import {
+  Typography,
+  Box,
+  AppBar,
+  Toolbar,
+  Link,
+  Theme,
+  useMediaQuery,
+} from '@mui/material';
 
 const logoSize = 80;
 
@@ -66,6 +74,10 @@ const Header: React.FC<HeaderProps> = ({
   userInfo,
   toggleTheme,
 }: HeaderProps): JSX.Element => {
+  const isMobile = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down('sm'),
+  );
+
   return (
     <AppBar position="static">
       <Toolbar sx={styles.toolbar}>
@@ -79,7 +91,7 @@ const Header: React.FC<HeaderProps> = ({
                 <Typography
                   sx={styles.userTypography}
                   color="secondary"
-                  variant="h6"
+                  variant={isMobile ? 'body2' : 'h6'}
                 >
                   {userInfo.nickname}
                 </Typography>
