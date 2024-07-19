@@ -22,7 +22,13 @@ const getTaskStatus = (isChecked: boolean): { src: string; alt: string } => {
       };
 };
 
-// Define the size of the image
+const updateTask = async (task: Task) => {
+  await axios.put(
+    `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
+    task,
+  );
+};
+
 const imageSizes = 20;
 
 /**
@@ -45,26 +51,17 @@ const CompleteTaskButton: React.FC<CompleteTaskButtonProps> = ({
 }: {
   task: Task;
 }): JSX.Element => {
-  // Define the isChecked state
   const [isChecked, setIsChecked] = useState(task.isComplete);
 
-  // Define the handleClick function
   const handleClick = useCallback(async () => {
     const newChecked = !isChecked;
     setIsChecked(newChecked);
     task.isComplete = newChecked;
-    // Call API to update the task's complete status
-    await axios.put(
-      // TODO: use apiClient
-      `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
-      task,
-    );
+    await updateTask(task);
   }, [isChecked, task]);
 
-  // Get the task status
   const taskStatus = getTaskStatus(isChecked);
 
-  // Render the CompleteTaskButton component
   return (
     <IconButton onClick={handleClick}>
       <Image

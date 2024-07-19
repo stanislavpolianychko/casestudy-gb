@@ -2,29 +2,30 @@ import React from 'react';
 import Task from '@/dto/task';
 import TaskListItem from '@/components/TaskListItem';
 import { Box, Typography } from '@mui/material';
+import LanguageSystem from '@/lang';
 
-interface TaskListItemProps {
+interface TaskListProps {
   tasks: Task[];
-  onUpdate: () => void;
+  onTaskUpdate: () => void;
 }
 
-const TaskList: React.FC<TaskListItemProps> = ({ tasks, onUpdate }) => {
+const taskListStyles = {
+  padding: '5px',
+  flexGrow: 1,
+  width: '100%',
+  overflow: 'auto',
+};
+
+const TaskList: React.FC<TaskListProps> = ({ tasks, onTaskUpdate }) => {
   return (
-    <Box
-      sx={{
-        padding: '5px',
-        flexGrow: 1,
-        width: '100%',
-        overflow: 'auto',
-      }}
-    >
+    <Box sx={taskListStyles}>
       {tasks.length > 0 ? (
         tasks.map((task) => (
-          <TaskListItem onUpdate={onUpdate} key={task.id} task={task} />
+          <TaskListItem onUpdate={onTaskUpdate} key={task.id} task={task} />
         ))
       ) : (
-        <Typography variant="h6" color="textSecondary" align="center">
-          No tasks found
+        <Typography variant="body1" color="secondary" align="center">
+          {LanguageSystem.getTranslation('noTasks')}
         </Typography>
       )}
     </Box>

@@ -2,30 +2,72 @@ import React, { useState } from 'react';
 import Task from '@/dto/task';
 import axios from 'axios';
 import CompleteTaskButton from '@/components/CompleteTaskButton';
-import TaskModalView from '@/components/TaskModalView';
+import TaskModalView from '@/components/taskModal/TaskModalView';
+import { Box } from '@mui/material';
+import Image from 'next/image';
+import ModalModes from '@/enums/modalModes';
 
 interface TaskListItemProps {
   task: Task;
   onUpdate: () => void;
 }
 
-const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
-  const [isCompleted, setIsCompleted] = useState(task.isComplete);
-  const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState<'readonly' | 'edit'>('readonly');
+const editIconPath = '/edit-icon.svg';
+const deleteIconPath = '/delete-icon.svg';
+const viewIconPath = '/3-dots-vertical-icon.svg';
 
-  const handleOpen = (mode: 'readonly' | 'edit') => {
+const iconSize = 20;
+
+const taskListItemStyles = {
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '15px',
+    borderRadius: '10px',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+    marginBottom: '10px',
+  },
+  taskInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+  },
+  actions: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '30px',
+  },
+};
+
+const updateTask = async (task: Task, updatedTask: Partial<Task>) => {
+  const response = await axios.put(
+    `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
+    updatedTask,
+  );
+  return response.data;
+};
+
+const deleteTask = async (task: Task) => {
+  const response = await axios.delete(
+    `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
+  );
+  return response.status;
+};
+
+const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
+  const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<ModalModes>(ModalModes.view);
+
+  const handleOpen = (mode: ModalModes) => {
     setMode(mode);
     setOpen(true);
   };
 
-  const handleEdit = async (updatedTask: Partial<Task>) => {
+  const handleEdit = async (updatedTask?: Partial<Task>) => {
     try {
-      const response = await axios.put(
-        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
-        updatedTask,
-      );
-      console.log('Task updated successfully:', response.data);
+      await updateTask(task, updatedTask!);
+      console.log('Task updated successfully');
     } catch (error) {
       console.error('Failed to update task:', error);
     }
@@ -36,21 +78,10 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
     setOpen(false);
   };
 
-  const handleCheckboxChange = async (newIsCompleted: boolean) => {
-    task.isComplete = newIsCompleted;
-    await axios.put(
-      `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
-      task,
-    );
-  };
-
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
-      );
-
-      if (response.status === 404) {
+      const status = await deleteTask(task);
+      if (status === 404) {
         console.log('Task not found, unable to delete');
       } else {
         console.log('Task deleted successfully');
@@ -62,39 +93,34 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '15px',
-        borderRadius: '10px',
-        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-        marginBottom: '10px',
-        // backgroundColor: 'rgba(224, 224, 224, 0.35)', // #E0E0E0 with 35% transparency
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <Box sx={taskListItemStyles.container}>
+      <Box sx={taskListItemStyles.taskInfo}>
         <CompleteTaskButton task={task} />
         {task.name.length > 15 ? `${task.name.substring(0, 15)}...` : task.name}
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'row', gap: '30px' }}>
-        <img
-          src={'/edit-icon.svg'}
-          style={{ width: '20px', height: '20px' }}
-          onClick={() => handleOpen('edit')}
+      </Box>
+      <Box sx={taskListItemStyles.actions}>
+        <Image
+          alt={'Edit'}
+          width={iconSize}
+          height={iconSize}
+          src={editIconPath}
+          onClick={() => handleOpen(ModalModes.edit)}
         />
-        <img
-          src={'/delete-icon.svg'}
-          style={{ width: '20px', height: '20px' }}
+        <Image
+          alt={'Delete'}
+          width={iconSize}
+          height={iconSize}
+          src={deleteIconPath}
           onClick={() => handleDelete()}
         />
-        <img
-          src={'/3-dots-vertical-icon.svg'}
-          style={{ width: '20px', height: '20px' }}
-          onClick={() => handleOpen('readonly')}
+        <Image
+          alt={'Info'}
+          width={iconSize}
+          height={iconSize}
+          src={viewIconPath}
+          onClick={() => handleOpen(ModalModes.view)}
         />
-      </div>
+      </Box>
       <TaskModalView
         mode={mode}
         onSubmit={handleEdit}
@@ -102,7 +128,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
         isOpen={open}
         task={task}
       />
-    </div>
+    </Box>
   );
 };
 

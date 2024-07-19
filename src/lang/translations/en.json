@@ -3,5 +3,14 @@
   "taskIncomplete": "Task incomplete",
   "madeBy": "made by @staspolianychko",
   "logoName": "TODO Logo",
-  "switchTheme": "Switch theme"
+  "switchTheme": "Switch theme",
+  "btnAdd": "Add",
+  "btnSave": "Save",
+  "btnClear": "Clear",
+  "btnDelete": "Delete",
+  "btnEdit": "Edit",
+  "btnCancel": "Cancel",
+  "noTasks": "No tasks found",
+  "greeting": "Hello!",
+  "greetingText": "Please, enter your nickname to start a TODO!"
 }

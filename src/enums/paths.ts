@@ -3,9 +3,9 @@
  * Each property of the `Paths` object is a route.
  * You can define a new route by adding a new property.
  */
-const Paths = {
-  Home: '/',
-  Login: '/login',
-};
+enum Paths {
+  Home = '/',
+  Login = '/login',
+}
 
 export default Paths;

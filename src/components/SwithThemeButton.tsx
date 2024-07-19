@@ -1,7 +1,7 @@
+import LanguageSystem from '@/lang';
+import Image from 'next/image';
 import React from 'react';
 import { IconButton, Theme } from '@mui/material';
-import Image from 'next/image';
-import LanguageSystem from '@/lang';
 
 const imageSize = 35;
 

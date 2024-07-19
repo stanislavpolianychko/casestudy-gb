@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Paper, Typography, Stack } from '@mui/material';
+import LanguageSystem from '@/lang';
 
 interface LoginFormProps {
   handleSubmit: (nickname: string) => void;
@@ -22,10 +23,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleSubmit }) => {
       <form onSubmit={handleFormSubmit}>
         <Stack spacing={2}>
           <Typography variant="h4" component="h1">
-            Hello!
+            {LanguageSystem.getTranslation('greeting')}
           </Typography>
           <Typography sx={{ color: '#6B69D9' }} variant="h6" component="h2">
-            Please, enter your nickname to start a TODO!
+            {LanguageSystem.getTranslation('greetingText')}
           </Typography>
           <TextField
             variant={'outlined'}

@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { Box, IconButton, Select, MenuItem } from '@mui/material';
-import TaskModalView from './TaskModalView';
+import { Box, IconButton } from '@mui/material';
+import TaskModalView from '@/components/taskModal/TaskModalView';
 import Task from '@/dto/task';
 import axios from 'axios';
+import TagsSelect from '@/components/TagsSelect';
+import ModalModes from '@/enums/modalModes';
+import Image from 'next/image';
 
 interface CreateTaskButtonProps {
   onCreate: () => void;
@@ -28,7 +31,7 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
     setOpen(false);
   };
 
-  const handleAdd = async (task: Partial<Task>) => {
+  const handleAdd = async (task?: Partial<Task>) => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     try {
@@ -56,31 +59,24 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
         justifyContent: 'center',
       }}
     >
-      <Select
-        color={'secondary'}
-        size="small"
-        sx={{ width: { xs: '90%', md: '50%' } }}
-        value={selectedTag}
-        onChange={(event) => {
-          setSelectedTag(event.target.value);
-          onTagChange(event.target.value);
+      <TagsSelect
+        selectedTag={selectedTag}
+        onTagChange={(tag) => {
+          setSelectedTag(tag);
+          onTagChange(tag);
         }}
-      >
-        <MenuItem value={''}>no tag</MenuItem>
-        <MenuItem value={'work'}>work</MenuItem>
-        <MenuItem value={'personal'}>personal</MenuItem>
-        <MenuItem value={'school'}>school</MenuItem>
-        <MenuItem value={'others'}>others</MenuItem>
-      </Select>
+        sx={{ width: { xs: '90%', md: '50%' } }}
+      />
       <IconButton onClick={handleOpen}>
-        <img
+        <Image
+          height={35}
+          width={35}
           src="/add-task-button.svg"
-          style={{ width: '35px', height: '35px' }}
           alt="plus icon"
         />
       </IconButton>
       <TaskModalView
-        mode={'create'}
+        mode={ModalModes.create}
         onClose={handleClose}
         onSubmit={handleAdd}
         isOpen={open}
