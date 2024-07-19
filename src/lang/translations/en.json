@@ -13,5 +13,17 @@
   "noTasks": "No tasks found",
   "greeting": "Hello!",
   "greetingText": "Please, enter your nickname to start a TODO!",
-  "addTaskIcon": "Add task"
+  "addTaskIcon": "Add task",
+  "tagNone": "None",
+  "tagWork": "Work",
+  "tagPersonal": "Personal",
+  "tagSchool": "School",
+  "tagOthers": "Others",
+  "login": "Login",
+  "nickname": "Nickname",
+  "prevPage": "Previous page",
+  "nextPage": "Next page",
+  "taskPriorityLabel": "Priority: ",
+  "taskDescriptionLabel": "Description",
+  "tasNameLabel": "Name"
 }

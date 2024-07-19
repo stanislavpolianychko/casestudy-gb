@@ -5,7 +5,10 @@ abstract class AppConfig {
   public static tasksPageItemsLimit: number = 9;
   public static sortTasksBy: string = 'priority';
   public static taskSortingOrder: string = 'desc';
-
+  public static maxNicknameLength: number = 5;
+  public static taskPriorityMax: number = 10;
+  public static taskPriorityMin: number = 1;
+  public static taskPriorityStep: number = 1;
   /**
    * Loads the configuration values from the environment variables.
    * If a required environment variable is not set, it logs an error message and exits the process.

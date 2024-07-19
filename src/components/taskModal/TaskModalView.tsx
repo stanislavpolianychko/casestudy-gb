@@ -5,6 +5,9 @@ import ModalModes from '@/enums/modalModes';
 import TaskForm from '@/components/taskModal/TaskForm';
 import TaskFormActions from '@/components/taskModal/TaskFormActions';
 
+/**
+ * TaskModalView component props
+ */
 export interface TaskModalViewProps {
   mode: ModalModes;
   task?: Task;
@@ -33,13 +36,18 @@ const modalContentStyles = {
   backgroundColor: 'background.paper',
 };
 
+/**
+ * TaskModalView component
+ * @param {TaskModalViewProps} props - Component props
+ * @returns {JSX.Element} - TaskModalView component
+ */
 const TaskModalView: React.FC<TaskModalViewProps> = ({
   isOpen,
   onClose,
   onSubmit,
   task,
   mode,
-}) => {
+}: TaskModalViewProps): JSX.Element => {
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={modalContentStyles}>

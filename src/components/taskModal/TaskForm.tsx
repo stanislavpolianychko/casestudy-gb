@@ -1,27 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { Box, TextField, Typography, Slider } from '@mui/material';
+import TaskPriorityPicker from '@/components/TaskPriorityPicker';
 import TagsSelect from '@/components/TagsSelect';
-import Task from '@/dto/task';
 import ModalModes from '@/enums/modalModes';
+import LanguageSystem from '@/lang';
+import Tags from '@/enums/tags';
+import Task from '@/dto/task';
+import { Box, TextField, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 
+/**
+ * TaskFormProps interface for TaskForm component props
+ * @interface
+ * @property {Task} task - Task object
+ * @property {ModalModes} mode - Mode of the modal
+ */
 interface TaskFormProps {
   task?: Task;
   mode: ModalModes;
 }
 
-const inputFieldsStyles = {
-  width: '60%',
+/**
+ * Styles for the TaskForm component
+ */
+const formStyles = {
+  box: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+    alignItems: 'center',
+  },
+  inputFieldsStyles: {
+    width: '60%',
+  },
 };
 
-const TaskForm: React.FC<TaskFormProps> = ({ task, mode }) => {
+/**
+ * TaskForm component
+ * @param {TaskFormProps} props - Component props
+ * @returns {JSX.Element} - TaskForm component
+ */
+const TaskForm: React.FC<TaskFormProps> = ({
+  task,
+  mode,
+}: TaskFormProps): JSX.Element => {
   const [selectedTag, setSelectedTag] = useState<string>(
-    task?.tag || 'personal',
+    task?.tag || Tags.None,
   );
   const [taskName, setTaskName] = useState(task?.name || '');
   const [taskDescription, setTaskDescription] = useState(
     task?.description || '',
   );
   const [taskPriority, setTaskPriority] = useState(task?.priority || 0);
+  const isDisabled = mode === ModalModes.view;
 
   useEffect(() => {
     if (task) {
@@ -32,55 +62,40 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, mode }) => {
   }, [task]);
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        alignItems: 'center',
-      }}
-    >
+    <Box sx={formStyles.box}>
       <TextField
         color={'secondary'}
         size="small"
         value={taskName}
-        sx={inputFieldsStyles}
+        sx={formStyles.inputFieldsStyles}
         onChange={(e) => setTaskName(e.target.value)}
-        placeholder="Task name"
-        disabled={mode === ModalModes.view}
+        placeholder={LanguageSystem.getTranslation('tasNameLabel')}
+        disabled={isDisabled}
       />
       <TextField
         color={'secondary'}
         size="small"
-        sx={inputFieldsStyles}
+        sx={formStyles.inputFieldsStyles}
         value={taskDescription}
         onChange={(e) => setTaskDescription(e.target.value)}
-        placeholder="Task description"
-        disabled={mode === ModalModes.view}
+        placeholder={LanguageSystem.getTranslation('taskDescriptionLabel')}
+        disabled={isDisabled}
       />
       <TagsSelect
         selectedTag={selectedTag}
-        onTagChange={setSelectedTag}
-        sx={inputFieldsStyles}
+        disabled={isDisabled}
+        onTagChange={(tag) => setSelectedTag(tag || Tags.Personal)}
+        sx={formStyles.inputFieldsStyles}
       />
       <Typography id="input-slider" gutterBottom>
-        Task Priority: {taskPriority}
+        {LanguageSystem.getTranslation('taskPriorityLabel')}
+        {taskPriority}
       </Typography>
-      <Slider
-        size="small"
-        color={'secondary'}
-        sx={inputFieldsStyles}
+      <TaskPriorityPicker
         value={taskPriority}
-        onChange={(_, newValue) => {
-          setTaskPriority(newValue as number);
-        }}
-        aria-labelledby="input-slider"
-        step={1}
-        marks
-        min={0}
-        max={10}
-        disabled={mode === ModalModes.view}
+        onChange={setTaskPriority}
+        disabled={isDisabled}
+        sx={formStyles.inputFieldsStyles}
       />
     </Box>
   );

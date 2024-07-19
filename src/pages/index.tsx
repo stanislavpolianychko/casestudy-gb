@@ -4,7 +4,7 @@ import Task from '@/dto/task';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import CreateTaskButton from '@/components/CreateTaskButton';
-import PaginationNavbar from '@/components/PagginationNavBar';
+import PaginationNavbar from '@/components/paggination/PagginationNavBar';
 import User from '@/dto/user';
 import TagsSelect from '@/components/TagsSelect';
 

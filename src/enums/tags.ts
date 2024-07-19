@@ -1,5 +1,5 @@
 export enum Tags {
-  None = '',
+  None = 'none',
   Work = 'work',
   Personal = 'personal',
   School = 'school',

@@ -29,7 +29,7 @@ const userInfoStyles = {
  *
  * @interface
  * @property {Theme} theme - The current theme of the application.
- * @property {User} userInfo - The current logged in user's information.
+ * @property {User} userInfo - The current logged-in user's information.
  * @property {Function} toggleTheme - Function to toggle the theme of the application.
  */
 interface HeaderProps {
@@ -44,7 +44,7 @@ interface HeaderProps {
  * It includes a logo, a theme switch button and user information.
  *
  * @param {Theme} theme - The current theme of the application.
- * @param {User} userInfo - The current logged in user's information.
+ * @param {User} userInfo - The current logged-in user's information.
  * @param {Function} toggleTheme - Function to toggle the theme of the application.
  *
  * @returns {JSX.Element} The rendered `Header` component.

@@ -1,20 +1,32 @@
-import { Select, MenuItem, BoxProps } from '@mui/material';
-import { Tags } from '@/enums/tags';
+import LanguageSystem from '@/lang';
 import React from 'react';
+import { Tags } from '@/enums/tags';
+import { Select, MenuItem } from '@mui/material';
 
+/**
+ * TagsSelect component props
+ */
 interface TagsSelectProps {
+  disabled: boolean;
   selectedTag: string | null;
   onTagChange: (tag: string | null) => void;
-  sx?: BoxProps['sx'];
+  sx?: any;
 }
 
+/**
+ * TagsSelect component
+ * @param {TagsSelectProps} props - Component props
+ * @returns {JSX.Element} - TagsSelect component
+ */
 const TagsSelect: React.FC<TagsSelectProps> = ({
+  disabled,
   selectedTag,
   onTagChange,
   sx,
-}) => {
+}: TagsSelectProps): JSX.Element => {
   return (
     <Select
+      disabled={disabled}
       color={'secondary'}
       size="small"
       sx={sx}
@@ -26,7 +38,7 @@ const TagsSelect: React.FC<TagsSelectProps> = ({
     >
       {Object.values(Tags).map((tag) => (
         <MenuItem key={tag} value={tag}>
-          {tag || 'no tag found'}
+          {LanguageSystem.getTranslation(`tag${tag}`)}
         </MenuItem>
       ))}
     </Select>
