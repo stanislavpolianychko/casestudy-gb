@@ -113,7 +113,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({
       </Box>
       <TaskModalView
         mode={mode}
-        onSubmit={() => handleEdit(task)}
+        onSubmit={handleEdit}
         onClose={handleClose}
         isOpen={open}
         task={task}

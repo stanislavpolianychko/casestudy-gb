@@ -25,6 +25,7 @@ const styles = {
   userBox: {
     border: '1px solid black',
     borderRadius: '10%',
+    textDecoration: 'none',
   },
   userTypography: {
     padding: '5px 15px',
@@ -69,12 +70,12 @@ const Header: React.FC<HeaderProps> = ({
     <AppBar position="static">
       <Toolbar sx={styles.toolbar}>
         <Box sx={styles.header}>
-          <Link href={Paths.Login}>
+          <Link href={Paths.Home}>
             <Logo size={logoSize} />
           </Link>
           {userInfo && (
             <Box sx={styles.userInfo}>
-              <Box sx={styles.userBox}>
+              <Link href={Paths.Login} sx={styles.userBox}>
                 <Typography
                   sx={styles.userTypography}
                   color="secondary"
@@ -82,7 +83,7 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   {userInfo.nickname}
                 </Typography>
-              </Box>
+              </Link>
               <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
             </Box>
           )}

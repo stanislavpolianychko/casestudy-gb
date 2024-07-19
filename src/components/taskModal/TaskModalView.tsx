@@ -64,8 +64,6 @@ const TaskModalView: React.FC<TaskModalViewProps> = ({
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={modalContentStyles}>
         <TaskForm
-          task={task}
-          mode={mode}
           taskName={taskName}
           setTaskName={setTaskName}
           taskDescription={taskDescription}
@@ -81,6 +79,8 @@ const TaskModalView: React.FC<TaskModalViewProps> = ({
           onCancel={onClose}
           onSubmit={() =>
             onSubmit({
+              userId: task?.userId,
+              id: task?.id,
               name: taskName,
               description: taskDescription,
               tag: selectedTag,
