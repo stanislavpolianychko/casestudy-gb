@@ -1,39 +1,28 @@
-import { Grid } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import UserAuthService from '@/services/userAuthService';
 import LoginForm from '@/components/LoginForm';
+import Paths from '@/enums/paths';
+import AppConfig from '@/config';
+import React from 'react';
+import { Grid } from '@mui/material';
 
-export default function Login() {
-  const [nickname, setEmail] = useState<string>('');
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (user && user.id) {
-      window.location.href = '/';
-    }
-  }, []);
-
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
+/**
+ * Login is a React component that renders a login form.
+ * It handles the form submission by calling the `UserAuthService.login` method.
+ * If the login is successful, it stores the user data in localStorage and redirects the user to the home page.
+ */
+function Login() {
+  const handleSubmit = async (nickname: string) => {
     try {
-      let response = await axios.get(
-        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users?nickname=${nickname}`,
-      );
-
-      console.log('we are here');
-      if (response.data.length === 0) {
-        // User does not exist, create a new user
-        response = await axios.post(
-          'https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users',
-          { nickname },
+      const user = await UserAuthService.login(nickname);
+      if (user) {
+        localStorage.setItem(
+          AppConfig.userLocalStorageKey,
+          JSON.stringify(user),
         );
+        window.location.href = Paths.Home;
       }
-
-      // Save user data in local storage
-      localStorage.setItem('user', JSON.stringify(response.data[0]));
-      window.location.href = '/';
     } catch (error) {
-      console.error('Failed to login:', error);
+      console.log(`Failed to login: ${error}`);
     }
   };
 
@@ -46,8 +35,10 @@ export default function Login() {
         alignItems="center"
         style={{ flexGrow: 1 }}
       >
-        <LoginForm nickname={nickname} handleSubmit={handleSubmit} />
+        <LoginForm handleSubmit={handleSubmit} />
       </Grid>
     </Grid>
   );
 }
+
+export default Login;

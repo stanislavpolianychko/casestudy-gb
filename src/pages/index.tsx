@@ -1,53 +1,115 @@
-import { Grid } from '@mui/material';
-import TaskList from '@/components/TaskList';
-import Task from '@/dto/task';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import PaginationNavbar from '@/components/paggination/PagginationNavBar';
 import CreateTaskButton from '@/components/CreateTaskButton';
-import PaginationNavbar from '@/components/PagginationNavBar';
+import TasksService from '@/services/tasksService';
+import TagsSelect from '@/components/TagsSelect';
+import TaskList from '@/components/TaskList';
+import Paths from '@/enums/paths';
+import AppConfig from '@/config';
+import Tags from '@/enums/tags';
+import Task from '@/dto/task';
+import User from '@/dto/user';
+import { Box, Grid } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 
-export default function Home() {
+const styles = {
+  grid: {
+    flexGrow: 1,
+    overflow: 'auto',
+    margin: '0 20px',
+  },
+  box: {
+    margin: '1rem 0',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tagsSelect: {
+    width: { xs: '90%', md: '50%' },
+  },
+};
+
+/**
+ * Home page component.
+ * This component fetches and displays tasks, handles pagination and task updates.
+ * It also manages the selected tag and current user state.
+ */
+function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [page, setPage] = useState(1);
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string>(Tags.None);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const fetchTasks = async (
-    userId: number,
-    page: number,
-    tag: string | null,
-  ) => {
-    let url = `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${userId}/tasks?limit=9&page=${page}&sortBy=priority&order=desc`;
-    if (tag) {
-      url += `&tag=${tag}`;
-    }
-    console.log('url', url);
-    try {
-      const response = await axios.get(url);
-      if (response.status == 200 && response?.data.length != 0) {
-        setTasks(response.data);
-      } else {
+  // Fetch tasks from the API and update the tasks state.
+  const fetchTasks = useCallback(
+    async (page: number, tag: string, userId: string) => {
+      try {
+        const fetchedTasks = await TasksService.getTasks(page, tag, userId);
+        if (fetchedTasks) {
+          setTasks(fetchedTasks);
+        } else if (page > 1) {
+          setPage(page - 1);
+        }
+      } catch (error) {
+        console.error('Failed to fetch tasks:', error);
         setTasks([]);
+        console.error('Failed to fetch tasks:', error);
       }
-    } catch (error) {
-      setTasks([]);
-      console.error('Failed to fetch tasks:', error);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!currentUser) {
+      getUserFromLocalStorage();
+    }
+    const user = localStorage.getItem('user');
+    if (user) {
+      setCurrentUser(JSON.parse(user));
+    } else {
+      window.location.href = Paths.Login;
+    }
+    if (currentUser && currentUser.id) {
+      fetchTasks(page, selectedTag, currentUser.id).then(() => {
+        console.log('Tasks updated');
+      });
+    } else {
+      window.location.href = Paths.Login;
+    }
+  }, [selectedTag, page, currentUser, fetchTasks]);
+
+  const getUserFromLocalStorage = () => {
+    const user = localStorage.getItem(AppConfig.userLocalStorageKey);
+    if (user) {
+      setCurrentUser(JSON.parse(user));
+    } else {
+      window.location.href = Paths.Login;
     }
   };
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (user && user.id) {
-      console.log('user', selectedTag);
-      fetchTasks(user.id, page, selectedTag);
-    } else {
-      window.location.href = '/login';
+  // force tasks list update from the API
+  const handleTasksUpdate = useCallback(() => {
+    if (currentUser && currentUser.id) {
+      fetchTasks(1, selectedTag, currentUser.id).then(() => {
+        console.log('Tasks updated');
+      });
     }
-  }, [selectedTag, page]);
+  }, [selectedTag, currentUser, fetchTasks]);
 
+  // Update the selectedTag state when the tag is changed.
+  const handleTagChange = useCallback(
+    (tag: string) => {
+      setSelectedTag(tag);
+    },
+    [currentUser, fetchTasks],
+  );
+
+  // Increment the page state to go to the next page of tasks.
   const nextPage = () => {
     setPage(page + 1);
   };
 
+  // Decrement the page state to go to the previous page of tasks.
   const previousPage = () => {
     if (page > 1) {
       setPage(page - 1);
@@ -55,17 +117,17 @@ export default function Home() {
   };
 
   return (
-    <Grid
-      item
-      container
-      direction="column"
-      style={{ flexGrow: 1, overflow: 'auto', margin: '0 20px' }}
-    >
-      <CreateTaskButton
-        onTagChange={(tag) => fetchTasks(1, 1, tag)}
-        onCreate={() => fetchTasks(1, 1, selectedTag)}
-      />
-      <TaskList onUpdate={() => fetchTasks(1, 1, selectedTag)} tasks={tasks} />
+    <Grid item container direction="column" style={styles.grid}>
+      <Box sx={styles.box}>
+        <TagsSelect
+          disabled={false}
+          selectedTag={selectedTag}
+          onTagChange={handleTagChange}
+          sx={styles.tagsSelect}
+        />
+        <CreateTaskButton onCreate={handleTasksUpdate} />
+      </Box>
+      <TaskList onTaskUpdate={handleTasksUpdate} tasks={tasks} />
       <PaginationNavbar
         page={page}
         hasNextPage={tasks.length > 0}
@@ -75,3 +137,5 @@ export default function Home() {
     </Grid>
   );
 }
+
+export default Home;

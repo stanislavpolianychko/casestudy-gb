@@ -1,45 +1,24 @@
-import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import type { AppProps } from 'next/app';
-import lightTheme from '../theme/light';
-import darkTheme from '../theme/dark';
-import { Grid } from '@mui/material';
-import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { defaultTheme } from '@/config';
+import useTheme from '@/hooks/useTheme';
+import useUser from '@/hooks/useUser';
+import AppConfig from '@/config';
+import { ThemeProvider } from '@mui/material/styles';
+import { Grid } from '@mui/material';
+import { AppProps } from 'next/app';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const [theme, setTheme] = useState(defaultTheme);
-  const [user, setUser] = useState(undefined);
+AppConfig.load();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme) {
-      setTheme(storedTheme === 'light' ? lightTheme : darkTheme);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('theme', theme === lightTheme ? 'light' : 'dark');
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) =>
-      prevTheme === lightTheme ? darkTheme : lightTheme,
-    );
-  };
+function TodoApp({ Component, pageProps }: AppProps) {
+  const { user } = useUser();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Grid container direction="column" style={{ minHeight: '100vh' }}>
-        <Header userInfo={user} toggleTheme={toggleTheme} />
+        <Header theme={theme} userInfo={user} toggleTheme={toggleTheme} />
         <Grid item container style={{ flexGrow: 1 }}>
           <Component {...pageProps} />
         </Grid>
@@ -49,4 +28,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default TodoApp;
