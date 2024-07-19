@@ -60,6 +60,10 @@ function Home() {
 
   useEffect(() => {
     getUserFromLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    getUserFromLocalStorage();
     if (currentUser && currentUser.id) {
       fetchTasks(page, selectedTag, currentUser.id).then(() => {
         console.log('Tasks updated');
@@ -68,29 +72,37 @@ function Home() {
   }, [selectedTag, page, currentUser, fetchTasks]);
 
   const getUserFromLocalStorage = () => {
+    if (currentUser !== null) {
+      return;
+    }
+
     const user = localStorage.getItem(AppConfig.userLocalStorageKey);
-    setCurrentUser(JSON.parse(user || '{}'));
-    if (!currentUser || !currentUser.id) {
+
+    if (!user) {
+      window.location.href = Paths.Login;
+      return;
+    }
+
+    try {
+      const parsedUser = JSON.parse(user);
+      setCurrentUser(parsedUser);
+    } catch (error) {
+      console.error('Failed to parse user data from local storage:', error);
       window.location.href = Paths.Login;
     }
   };
 
   // force tasks list update from the API
   const handleTasksUpdate = useCallback(() => {
-    if (currentUser && currentUser.id) {
-      fetchTasks(1, selectedTag, currentUser.id).then(() => {
-        console.log('Tasks updated');
-      });
-    }
-  }, [selectedTag, currentUser, fetchTasks]);
+    setSelectedTag(Tags.None);
+    setPage(1);
+  }, []);
 
   // Update the selectedTag state when the tag is changed.
-  const handleTagChange = useCallback(
-    (tag: string) => {
-      setSelectedTag(tag);
-    },
-    [currentUser, fetchTasks],
-  );
+  const handleTagChange = useCallback((tag: string) => {
+    setSelectedTag(tag);
+    setPage(1);
+  }, []);
 
   // Increment the page state to go to the next page of tasks.
   const nextPage = () => {
