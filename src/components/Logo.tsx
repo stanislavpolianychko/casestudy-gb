@@ -26,6 +26,7 @@ interface LogoProps {
  */
 const Logo: React.FC<LogoProps> = ({ size }: LogoProps): JSX.Element => (
   <Image
+    style={{ marginBottom: '-8px' }} // not the best to align items, but simple and fast : )
     width={size}
     height={size}
     src={logoSrc}

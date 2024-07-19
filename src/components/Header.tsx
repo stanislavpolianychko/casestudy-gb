@@ -7,20 +7,31 @@ import User from '@/dto/user';
 
 const logoSize = 80;
 
-const headerStyles = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  width: '100%',
-};
-
-const userInfoStyles = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  gap: 5,
-  color: '#959595',
+const styles = {
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  userInfo: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 2,
+    color: '#959595',
+  },
+  userBox: {
+    border: '1px solid black',
+    borderRadius: '10%',
+  },
+  userTypography: {
+    padding: '5px 15px',
+  },
+  toolbar: {
+    margin: '0 20px',
+  },
 };
 
 /**
@@ -56,15 +67,23 @@ const Header: React.FC<HeaderProps> = ({
 }: HeaderProps): JSX.Element => {
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Box sx={headerStyles}>
+      <Toolbar sx={styles.toolbar}>
+        <Box sx={styles.header}>
           <Link href={Paths.Login}>
             <Logo size={logoSize} />
           </Link>
           {userInfo && (
-            <Box sx={userInfoStyles}>
+            <Box sx={styles.userInfo}>
+              <Box sx={styles.userBox}>
+                <Typography
+                  sx={styles.userTypography}
+                  color="secondary"
+                  variant="h6"
+                >
+                  {userInfo.nickname}
+                </Typography>
+              </Box>
               <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
-              <Typography variant="h6">{userInfo.nickname}</Typography>
             </Box>
           )}
         </Box>

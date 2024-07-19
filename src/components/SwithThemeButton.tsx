@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import { IconButton, Theme } from '@mui/material';
 
-const imageSize = 35;
+const imageSize = 45;
 
 const darkImageSrc = '/theme-dark-icon.svg';
 const lightImageSrc = '/theme-light-icon.svg';
