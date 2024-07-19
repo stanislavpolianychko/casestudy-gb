@@ -3,8 +3,8 @@ import { Tags } from '@/enums/tags';
 import React from 'react';
 
 interface TagsSelectProps {
-  selectedTag: string;
-  onTagChange: (tag: string) => void;
+  selectedTag: string | null;
+  onTagChange: (tag: string | null) => void;
   sx?: BoxProps['sx'];
 }
 

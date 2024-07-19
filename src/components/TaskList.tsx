@@ -1,13 +1,8 @@
-import React from 'react';
-import Task from '@/dto/task';
 import TaskListItem from '@/components/TaskListItem';
-import { Box, Typography } from '@mui/material';
 import LanguageSystem from '@/lang';
-
-interface TaskListProps {
-  tasks: Task[];
-  onTaskUpdate: () => void;
-}
+import Task from '@/dto/task';
+import React from 'react';
+import { Box, Typography } from '@mui/material';
 
 const taskListStyles = {
   padding: '5px',
@@ -16,7 +11,25 @@ const taskListStyles = {
   overflow: 'auto',
 };
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onTaskUpdate }) => {
+interface TaskListProps {
+  tasks: Task[];
+  onTaskUpdate: () => void;
+}
+
+/**
+ * TaskList component.
+ * This component displays a list of tasks.
+ * If there are no tasks, it displays a message saying there are no tasks.
+ *
+ * @param {TaskListProps} props - The props for the component.
+ * @param {Task[]} props.tasks - The tasks to display in the list.
+ * @param {Function} props.onTaskUpdate - Function to call when a task is updated.
+ * @returns {JSX.Element} The TaskList component.
+ */
+const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  onTaskUpdate,
+}: TaskListProps): JSX.Element => {
   return (
     <Box sx={taskListStyles}>
       {tasks.length > 0 ? (

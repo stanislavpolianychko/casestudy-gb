@@ -8,7 +8,7 @@ import TaskFormActions from '@/components/taskModal/TaskFormActions';
 export interface TaskModalViewProps {
   mode: ModalModes;
   task?: Task;
-  onSubmit: (task?: Partial<Task>) => void;
+  onSubmit: (task?: Task) => void;
   onClose: () => void;
   isOpen: boolean;
 }

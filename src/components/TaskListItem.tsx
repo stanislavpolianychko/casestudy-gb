@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
 import Task from '@/dto/task';
-import axios from 'axios';
 import CompleteTaskButton from '@/components/CompleteTaskButton';
 import TaskModalView from '@/components/taskModal/TaskModalView';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import ModalModes from '@/enums/modalModes';
-
-interface TaskListItemProps {
-  task: Task;
-  onUpdate: () => void;
-}
-
-const editIconPath = '/edit-icon.svg';
-const deleteIconPath = '/delete-icon.svg';
-const viewIconPath = '/3-dots-vertical-icon.svg';
+import TasksService from '@/services/tasksService';
 
 const iconSize = 20;
 
@@ -40,22 +31,23 @@ const taskListItemStyles = {
   },
 };
 
-const updateTask = async (task: Task, updatedTask: Partial<Task>) => {
-  const response = await axios.put(
-    `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
-    updatedTask,
-  );
-  return response.data;
-};
+/**
+ * TaskListItem component props
+ */
+interface TaskListItemProps {
+  task: Task;
+  onUpdate: () => void;
+}
 
-const deleteTask = async (task: Task) => {
-  const response = await axios.delete(
-    `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
-  );
-  return response.status;
-};
-
-const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
+/**
+ * TaskListItem component
+ * @param {TaskListItemProps} props - Component props
+ * @returns {JSX.Element} - TaskListItem component
+ */
+const TaskListItem: React.FC<TaskListItemProps> = ({
+  task,
+  onUpdate,
+}: TaskListItemProps): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<ModalModes>(ModalModes.view);
 
@@ -64,28 +56,22 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
     setOpen(true);
   };
 
-  const handleEdit = async (updatedTask?: Partial<Task>) => {
-    try {
-      await updateTask(task, updatedTask!);
-      console.log('Task updated successfully');
-    } catch (error) {
-      console.error('Failed to update task:', error);
-    }
-    onUpdate();
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
 
+  const handleEdit = async (updatedTask?: Task) => {
+    try {
+      await TasksService.updateTask(updatedTask!);
+      onUpdate();
+    } catch (error) {
+      console.error('Failed to update task:', error);
+    }
+  };
+
   const handleDelete = async () => {
     try {
-      const status = await deleteTask(task);
-      if (status === 404) {
-        console.log('Task not found, unable to delete');
-      } else {
-        console.log('Task deleted successfully');
-      }
+      await TasksService.deleteTask(task);
       onUpdate();
     } catch (error) {
       console.error('Failed to delete task:', error);
@@ -103,21 +89,21 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ task, onUpdate }) => {
           alt={'Edit'}
           width={iconSize}
           height={iconSize}
-          src={editIconPath}
+          src={'/edit-icon.svg'}
           onClick={() => handleOpen(ModalModes.edit)}
         />
         <Image
           alt={'Delete'}
           width={iconSize}
           height={iconSize}
-          src={deleteIconPath}
+          src={'/delete-icon.svg'}
           onClick={() => handleDelete()}
         />
         <Image
           alt={'Info'}
           width={iconSize}
           height={iconSize}
-          src={viewIconPath}
+          src={'/3-dots-vertical-icon.svg'}
           onClick={() => handleOpen(ModalModes.view)}
         />
       </Box>

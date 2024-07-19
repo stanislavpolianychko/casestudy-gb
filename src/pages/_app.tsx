@@ -1,41 +1,18 @@
-import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { AppProps } from 'next/app';
-import lightTheme from '../theme/light';
-import darkTheme from '../theme/dark';
-import { Grid } from '@mui/material';
-import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import useTheme from '@/hooks/useTheme';
+import useUser from '@/hooks/useUser';
 import AppConfig from '@/config';
+import { ThemeProvider } from '@mui/material/styles';
+import { Grid } from '@mui/material';
+import { AppProps } from 'next/app';
 
 AppConfig.load();
 
 function TodoApp({ Component, pageProps }: AppProps) {
-  const [theme, setTheme] = useState(darkTheme);
-  const [user, setUser] = useState(undefined);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser !== 'undefined' && storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme) {
-      setTheme(storedTheme === 'light' ? lightTheme : darkTheme);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('theme', theme === lightTheme ? 'light' : 'dark');
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) =>
-      prevTheme === lightTheme ? darkTheme : lightTheme,
-    );
-  };
+  const { user } = useUser();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <ThemeProvider theme={theme}>

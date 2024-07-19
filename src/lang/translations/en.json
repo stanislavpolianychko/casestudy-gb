@@ -12,5 +12,6 @@
   "btnCancel": "Cancel",
   "noTasks": "No tasks found",
   "greeting": "Hello!",
-  "greetingText": "Please, enter your nickname to start a TODO!"
+  "greetingText": "Please, enter your nickname to start a TODO!",
+  "addTaskIcon": "Add task"
 }

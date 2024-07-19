@@ -1,16 +1,18 @@
+import TasksService from '@/services/tasksService';
 import IconButton from '@mui/material/IconButton';
-import Image from 'next/image';
-import React, { useState, useCallback } from 'react';
-import Task from '@/dto/task';
-import axios from 'axios';
 import LanguageSystem from '@/lang';
+import Image from 'next/image';
+import Task from '@/dto/task';
+import React, { useState, useCallback } from 'react';
 
 /**
  * Function to get task status based on isChecked state
  * @param {boolean} isChecked - The checked state of the checkbox
  * @returns {{src: string; alt: string}} An object containing the src and alt attributes for the image
  */
-const getTaskStatus = (isChecked: boolean): { src: string; alt: string } => {
+const getTaskStatusImageInfo = (
+  isChecked: boolean,
+): { src: string; alt: string } => {
   return isChecked
     ? {
         src: '/task-complete-icon.svg',
@@ -20,13 +22,6 @@ const getTaskStatus = (isChecked: boolean): { src: string; alt: string } => {
         src: '/task-incomplete-icon.svg',
         alt: LanguageSystem.getTranslation('taskIncomplete'),
       };
-};
-
-const updateTask = async (task: Task) => {
-  await axios.put(
-    `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${task.userId}/tasks/${task.id}`,
-    task,
-  );
 };
 
 const imageSizes = 20;
@@ -54,13 +49,11 @@ const CompleteTaskButton: React.FC<CompleteTaskButtonProps> = ({
   const [isChecked, setIsChecked] = useState(task.isComplete);
 
   const handleClick = useCallback(async () => {
-    const newChecked = !isChecked;
-    setIsChecked(newChecked);
-    task.isComplete = newChecked;
-    await updateTask(task);
+    setIsChecked(!task.isComplete);
+    await TasksService.updateTaskIsComplete(task);
   }, [isChecked, task]);
 
-  const taskStatus = getTaskStatus(isChecked);
+  const taskStatus = getTaskStatusImageInfo(isChecked);
 
   return (
     <IconButton onClick={handleClick}>

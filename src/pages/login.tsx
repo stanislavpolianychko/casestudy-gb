@@ -1,9 +1,9 @@
 import UserAuthService from '@/services/userAuthService';
 import LoginForm from '@/components/LoginForm';
-import React from 'react';
-import { Grid } from '@mui/material';
 import Paths from '@/enums/paths';
 import AppConfig from '@/config';
+import React from 'react';
+import { Grid } from '@mui/material';
 
 /**
  * Login is a React component that renders a login form.

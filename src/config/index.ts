@@ -1,6 +1,10 @@
 abstract class AppConfig {
   public static apiBaseUrl: string | undefined;
   public static userLocalStorageKey: string = 'user';
+  public static themeLocalStorageKey: string = 'theme';
+  public static tasksPageItemsLimit: number = 9;
+  public static sortTasksBy: string = 'priority';
+  public static taskSortingOrder: string = 'desc';
 
   /**
    * Loads the configuration values from the environment variables.

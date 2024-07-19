@@ -1,29 +1,33 @@
-import { useState } from 'react';
-import { Box, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { IconButton } from '@mui/material';
 import TaskModalView from '@/components/taskModal/TaskModalView';
 import Task from '@/dto/task';
-import axios from 'axios';
-import TagsSelect from '@/components/TagsSelect';
 import ModalModes from '@/enums/modalModes';
 import Image from 'next/image';
+import TasksService from '@/services/tasksService';
+import AppConfig from '@/config';
+import LanguageSystem from '@/lang';
 
+const imageSize = 35;
+
+/**
+ * CreateTaskButton component props
+ */
 interface CreateTaskButtonProps {
   onCreate: () => void;
-  onTagChange: (tag: string) => void;
 }
 
+/**
+ * CreateTaskButton component
+ * @param {CreateTaskButtonProps} props - Component props
+ * @returns {JSX.Element} - CreateTaskButton component
+ */
 const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
   onCreate,
-  onTagChange,
-}) => {
-  const [taskName, setTaskName] = useState('');
+}: CreateTaskButtonProps): JSX.Element => {
   const [open, setOpen] = useState(false);
-  const [selectedTag, setSelectedTag] = useState<string>('');
 
   const handleOpen = () => {
-    if (taskName) {
-      setTaskName('');
-    }
     setOpen(true);
   };
 
@@ -32,15 +36,23 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
   };
 
   const handleAdd = async (task?: Partial<Task>) => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    let user;
+    try {
+      user = JSON.parse(
+        localStorage.getItem(AppConfig.userLocalStorageKey) || '{}',
+      );
+    } catch (error) {
+      console.error('Failed to parse user from local storage:', error);
+      return;
+    }
+
+    if (!user.id) {
+      console.error('User ID is undefined');
+      return;
+    }
 
     try {
-      const response = await axios.post(
-        `https://669798f302f3150fb66e44ba.mockapi.io/api/v1/users/${user.id}/tasks`,
-        task,
-      );
-      console.log('here just for test', task);
-      console.log('Task created successfully:', response.data);
+      await TasksService.createTask(task!, user.id);
       onCreate();
     } catch (error) {
       console.error('Failed to create task:', error);
@@ -50,29 +62,13 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
   };
 
   return (
-    <Box
-      sx={{
-        margin: '1rem 0',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <TagsSelect
-        selectedTag={selectedTag}
-        onTagChange={(tag) => {
-          setSelectedTag(tag);
-          onTagChange(tag);
-        }}
-        sx={{ width: { xs: '90%', md: '50%' } }}
-      />
+    <>
       <IconButton onClick={handleOpen}>
         <Image
-          height={35}
-          width={35}
+          height={imageSize}
+          width={imageSize}
           src="/add-task-button.svg"
-          alt="plus icon"
+          alt={LanguageSystem.getTranslation('addTaskIcon')}
         />
       </IconButton>
       <TaskModalView
@@ -81,7 +77,7 @@ const CreateTaskButton: React.FC<CreateTaskButtonProps> = ({
         onSubmit={handleAdd}
         isOpen={open}
       />
-    </Box>
+    </>
   );
 };
 

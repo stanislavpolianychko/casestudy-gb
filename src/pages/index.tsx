@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import TaskList from '@/components/TaskList';
 import Task from '@/dto/task';
 import { useEffect, useState } from 'react';
@@ -6,6 +6,7 @@ import axios from 'axios';
 import CreateTaskButton from '@/components/CreateTaskButton';
 import PaginationNavbar from '@/components/PagginationNavBar';
 import User from '@/dto/user';
+import TagsSelect from '@/components/TagsSelect';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -68,10 +69,27 @@ export default function Home() {
       direction="column"
       style={{ flexGrow: 1, overflow: 'auto', margin: '0 20px' }}
     >
-      <CreateTaskButton
-        onTagChange={(tag) => fetchTasks(currentUser!.id, 1, tag)}
-        onCreate={() => fetchTasks(currentUser!.id, 1, selectedTag)}
-      />
+      <Box
+        sx={{
+          margin: '1rem 0',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <TagsSelect
+          selectedTag={selectedTag}
+          onTagChange={async (tag) => {
+            setSelectedTag(tag);
+            await fetchTasks(currentUser!.id, 1, tag);
+          }}
+          sx={{ width: { xs: '90%', md: '50%' } }}
+        />
+        <CreateTaskButton
+          onCreate={() => fetchTasks(currentUser!.id, 1, selectedTag)}
+        />
+      </Box>
       <TaskList
         onTaskUpdate={() => fetchTasks(currentUser!.id, 1, selectedTag)}
         tasks={tasks}

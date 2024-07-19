@@ -1,9 +1,9 @@
 import SwitchThemeButton from '@/components/SwithThemeButton';
 import Logo from '@/components/Logo';
 import Paths from '@/enums/paths';
-import User from '@/dto/user';
 import React from 'react';
 import { Typography, Box, AppBar, Toolbar, Link, Theme } from '@mui/material';
+import User from '@/dto/user';
 
 const logoSize = 80;
 
