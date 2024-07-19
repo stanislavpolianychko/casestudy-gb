@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Grid container direction="column" style={{ minHeight: '100vh' }}>
-        <Header userInfo={user} toggleTheme={toggleTheme} />
+        <Header theme={theme} userInfo={user} toggleTheme={toggleTheme} />
         <Grid item container style={{ flexGrow: 1 }}>
           <Component {...pageProps} />
         </Grid>

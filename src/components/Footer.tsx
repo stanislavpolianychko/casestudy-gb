@@ -15,7 +15,7 @@ const styles = {
 function Footer(): JSX.Element {
   return (
     <Box sx={styles}>
-      <Typography variant="body2" sx={{ color: '#888' }}>
+      <Typography variant="body2" color="#888">
         {LanguageSystem.getTranslation('madeBy')}
       </Typography>
     </Box>

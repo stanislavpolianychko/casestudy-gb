@@ -1,79 +1,70 @@
-import React from 'react';
-import {
-  Typography,
-  Box,
-  AppBar,
-  Toolbar,
-  useMediaQuery,
-  useTheme,
-  Link,
-} from '@mui/material';
-import User from '@/dto/user';
 import SwitchThemeButton from '@/components/SwithThemeButton';
+import Logo from '@/components/Logo';
+import User from '@/dto/user';
+import Paths from '@/paths';
+import React from 'react';
+import { Typography, Box, AppBar, Toolbar, Link, Theme } from '@mui/material';
 
+const logoSize = 80;
+
+const headerStyles = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  width: '100%',
+};
+
+const userInfoStyles = {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: 5,
+  color: '#959595',
+};
+
+/**
+ * `HeaderProps` interface.
+ * This interface defines the props for the `Header` component.
+ *
+ * @interface
+ * @property {Theme} theme - The current theme of the application.
+ * @property {User} userInfo - The current logged in user's information.
+ * @property {Function} toggleTheme - Function to toggle the theme of the application.
+ */
 interface HeaderProps {
+  theme: Theme;
   userInfo?: User;
   toggleTheme: () => void;
 }
 
-const Logo: React.FC<{ size: string }> = ({ size }) => (
-  <img
-    src={'/todo-logo.svg'}
-    alt="logo"
-    style={{ maxWidth: size, maxHeight: size }}
-  />
-);
-
-const UserIcon: React.FC<{ size: string }> = ({ size }) => (
-  <img
-    src="/user-sample-icon.svg"
-    alt="user logo"
-    style={{ maxWidth: size, maxHeight: size }}
-  />
-);
-
-const Header: React.FC<HeaderProps> = ({ userInfo, toggleTheme }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const logoSize = '90px';
-  const imageSize = isMobile ? '50px' : '60px';
-  const typographyVariant = isMobile ? 'body1' : 'h6';
-
+/**
+ * `Header` component.
+ * This component renders the header of the application.
+ * It includes a logo, a theme switch button and user information.
+ *
+ * @param {Theme} theme - The current theme of the application.
+ * @param {User} userInfo - The current logged in user's information.
+ * @param {Function} toggleTheme - Function to toggle the theme of the application.
+ *
+ * @returns {JSX.Element} The rendered `Header` component.
+ */
+const Header: React.FC<HeaderProps> = ({
+  theme,
+  userInfo,
+  toggleTheme,
+}: HeaderProps): JSX.Element => {
   return (
-    <AppBar sx={{ padding: '15px' }} position="static">
+    <AppBar position="static">
       <Toolbar>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-          }}
-        >
-          <Link href="/login">
+        <Box sx={headerStyles}>
+          <Link href={Paths.Login}>
             <Logo size={logoSize} />
           </Link>
-          {isMobile && (
-            <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
-          )}
           {userInfo && (
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: 5,
-              }}
-            >
-              {!isMobile && (
-                <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
-              )}
-              <Typography sx={{ color: '#959595' }} variant={typographyVariant}>
-                {userInfo.nickname}
-              </Typography>
-              <UserIcon size={imageSize} />
+            <Box sx={userInfoStyles}>
+              <SwitchThemeButton theme={theme} toggleTheme={toggleTheme} />
+              <Typography variant="h6">{userInfo.nickname}</Typography>
             </Box>
           )}
         </Box>
