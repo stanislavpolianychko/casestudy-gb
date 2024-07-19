@@ -1,27 +1,26 @@
-import { Grid } from '@mui/material';
-import React from 'react';
-import LoginForm from '@/components/LoginForm';
-import Paths from '@/enums/paths';
 import UserAuthService from '@/services/userAuthService';
+import LoginForm from '@/components/LoginForm';
+import React from 'react';
+import { Grid } from '@mui/material';
+import Paths from '@/enums/paths';
 import AppConfig from '@/config';
-import User from '@/dto/user';
 
+/**
+ * Login is a React component that renders a login form.
+ * It handles the form submission by calling the `UserAuthService.login` method.
+ * If the login is successful, it stores the user data in localStorage and redirects the user to the home page.
+ */
 export default function Login() {
-  const onLoginSuccess = (user: User) => {
-    localStorage.setItem(AppConfig.userLocalStorageKey, JSON.stringify(user));
-    window.location.href = Paths.Home;
-  };
-
-  const handleLogin = async (nickname: string) => {
-    const user = await UserAuthService.login(nickname);
-    if (user) {
-      onLoginSuccess(user);
-    }
-  };
-
   const handleSubmit = async (nickname: string) => {
     try {
-      await handleLogin(nickname);
+      const user = await UserAuthService.login(nickname);
+      if (user) {
+        localStorage.setItem(
+          AppConfig.userLocalStorageKey,
+          JSON.stringify(user),
+        );
+        window.location.href = Paths.Home;
+      }
     } catch (error) {
       console.log(`Failed to login: ${error}`);
     }
